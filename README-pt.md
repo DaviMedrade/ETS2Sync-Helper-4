@@ -21,3 +21,8 @@ Se você tiver o Console de Desenvolvimento ativado no jogo, você pode usar o c
 
 ## Clear Jobs
 Uma funcionalidade adicionada nesta versão é a possibilidade de esvaziar o Mercado de Fretes. Dessa forma, se você não quer mais jogar com a lista sincronizada e quiser que o jogo gere uma lista de cargas nova para você jogar sozinho, você só precisa fazer o mesmo processo que o de sincronização, mas clicando em “Clear Jobs” em vez de “Sync Jobs”. Ao carregar o save, o Mercado de Fretes vai estar vazio. Aí basta pular para a oficina com o F7 e o jogo gerará novas cargas para você.
+
+## Bugs/Problemas
+Se você encontrar um problema no programa, informe no link abaixo:
+
+https://github.com/davidsantos-br/ETS2Sync-Helper-4/issues

@@ -21,3 +21,8 @@ If you have the Developer Console enabled in the game, you can just issue the co
 
 ## Clear Jobs
 One feature introduced in this version is the ability to empty the Freight Market. That way, if you are done using the synced list and want the game to generate a new list of jobs for you to play alone, you just need to do the same process as for syncing, but click on “Clear Jobs” instead of “Sync Jobs”. When you load the save, the Freight Market will be empty. Just jump to the mechanic with F7 and the game will generate new jobs for you.
+
+## Bugs/Issues
+If you find a problem in the app, report it on the link below:
+
+https://github.com/davidsantos-br/ETS2Sync-Helper-4/issues
