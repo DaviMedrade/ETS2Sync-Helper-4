@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C58DE3D1-9460-4ACD-A334-8A8B9991DEF4}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Ets2SyncHelper</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>build\$(Configuration)\</OutDir>
+    <IntDir>build\$(Configuration)\</IntDir>
+    <TargetName>ets2sync_helper</TargetName>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>build\$(Configuration)\</OutDir>
+    <IntDir>build\$(Configuration)\</IntDir>
+    <TargetName>ets2sync_helper</TargetName>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;WINVER=0x0601;__WXMSW__;_wxUSE_GUI=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\include\msvc;$(WXWIN)\include;$(ZLIBDIR);$(ProjectDir)lib</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+      <PrecompiledHeaderFile>precomp.hpp</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_lib;$(ZLIBDIR)\contrib\vstudio\vc11\x86\ZlibStat$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>zlibstat.lib;wininet.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(WXWIN)\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;WINVER=0x0601;__WXMSW__;_wxUSE_GUI=1;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(WXWIN)\include\msvc;$(WXWIN)\include;$(ZLIBDIR);$(ProjectDir)lib</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+      <PrecompiledHeaderFile>precomp.hpp</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(WXWIN)\lib\vc_lib;$(ZLIBDIR)\contrib\vstudio\vc11\x86\ZlibStat$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>zlibstat.lib;wininet.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(WXWIN)\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="res\resource.h" />
+    <ClInclude Include="src\AboutWindow.hpp" />
+    <ClInclude Include="src\DlcSelector.hpp" />
+    <ClInclude Include="src\Ets2SyncHelperApp.hpp" />
+    <ClInclude Include="src\Ets2StaticBox.hpp" />
+    <ClInclude Include="src\Ets2\File.hpp" />
+    <ClInclude Include="src\Ets2\Info.hpp" />
+    <ClInclude Include="src\Ets2\Parser\Cfg.hpp" />
+    <ClInclude Include="src\Ets2\lib\file.hpp" />
+    <ClInclude Include="src\Ets2\lib\precomp.hpp" />
+    <ClInclude Include="src\Ets2\Parser\precomp.hpp" />
+    <ClInclude Include="src\Ets2\Parser\Sii.hpp" />
+    <ClInclude Include="src\Ets2\Parser\SiiBinary.hpp" />
+    <ClInclude Include="src\Ets2\Parser\SiiText.hpp" />
+    <ClInclude Include="src\Ets2\lib\Utf8ToUtf16.hpp" />
+    <ClInclude Include="src\Ets2\Object.hpp" />
+    <ClInclude Include="src\Ets2\ObjectList.hpp" />
+    <ClInclude Include="src\Ets2\precomp.hpp" />
+    <ClInclude Include="src\Ets2\Save.hpp" />
+    <ClInclude Include="src\Ets2\Profile.hpp" />
+    <ClInclude Include="src\GameSettingsPanel.hpp" />
+    <ClInclude Include="src\JobSyncer.hpp" />
+    <ClInclude Include="src\MainWindow.hpp" />
+    <ClInclude Include="src\ObjectSelector.hpp" />
+    <ClInclude Include="src\ObjectCombobox.hpp" />
+    <ClInclude Include="src\precomp.hpp" />
+    <ClInclude Include="src\ProfileSelector.hpp" />
+    <ClInclude Include="src\SaveSelector.hpp" />
+    <ClInclude Include="src\ShowLastWindowsError.hpp" />
+    <ClInclude Include="src\StatusText.hpp" />
+    <ClInclude Include="src\UpdateChecker.hpp" />
+    <ClInclude Include="src\version.hpp" />
+    <ClInclude Include="src\SyncDialog.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AboutWindow.cpp" />
+    <ClCompile Include="src\DlcSelector.cpp" />
+    <ClCompile Include="src\Ets2SyncHelperApp.cpp" />
+    <ClCompile Include="src\Ets2StaticBox.cpp" />
+    <ClCompile Include="src\Ets2\File.cpp" />
+    <ClCompile Include="src\Ets2\Info.cpp" />
+    <ClCompile Include="src\Ets2\lib\file.cpp" />
+    <CustomBuild Include="src\Ets2\Parser\SiiText.rl.cpp">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ragel -L -G1 --error-format=msvc %(Identity) -o %(RelativeDir)SiiText.cpp &amp; (ragel --error-format=msvc -Vp %(Identity) | dot -Tsvg -o %(RelativeDir)SiiText.svg)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ragel -L -G1 --error-format=msvc %(Identity) -o %(RelativeDir)SiiText.cpp &amp; (ragel --error-format=msvc -Vp %(Identity) | dot -Tsvg -o %(RelativeDir)SiiText.svg)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ragel: %(Identity) =^&gt; %(RelativeDir)SiiText.cpp</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ragel: %(Identity) =^&gt; %(RelativeDir)SiiText.cpp</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)SiiText.cpp; %(RelativeDir)SiiText.svg</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)SiiText.cpp; %(RelativeDir)SiiText.svg</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)SiiText.rl; %(RelativeDir)SiiText.hpp</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)SiiText.rl; %(RelativeDir)SiiText.hpp</AdditionalInputs>
+    </CustomBuild>
+    <ClCompile Include="src\Ets2\Parser\Cfg.cpp" />
+    <ClCompile Include="src\Ets2\Parser\SiiText.cpp" />
+    <ClCompile Include="src\Ets2\Parser\SiiBinary.cpp" />
+    <ClCompile Include="src\Ets2\lib\Utf8ToUtf16.cpp" />
+    <ClCompile Include="src\Ets2\Object.cpp" />
+    <ClCompile Include="src\Ets2\Profile.cpp" />
+    <ClCompile Include="src\Ets2\Save.cpp" />
+    <ClCompile Include="src\GameSettingsPanel.cpp" />
+    <ClCompile Include="src\JobSyncer.cpp" />
+    <ClCompile Include="src\MainWindow.cpp" />
+    <ClCompile Include="src\precomp.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\ProfileSelector.cpp" />
+    <ClCompile Include="src\SaveSelector.cpp" />
+    <ClCompile Include="src\ShowLastWindowsError.cpp" />
+    <ClCompile Include="src\StatusText.cpp" />
+    <ClCompile Include="src\SyncDialog.cpp" />
+    <ClCompile Include="src\UpdateChecker.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\app.ico" />
+    <Image Include="res\icon_256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="src\Ets2\Parser\Cfg.rl.cpp">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ragel -L -G0 --error-format=msvc %(Identity) -o %(RelativeDir)Cfg.cpp &amp; (ragel --error-format=msvc -Vp %(Identity) | dot -Tsvg -o %(RelativeDir)Cfg.svg)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)Cfg.cpp; %(RelativeDir)Cfg.svg</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ragel -L -G0 --error-format=msvc %(Identity) -o %(RelativeDir)Cfg.cpp &amp; (ragel --error-format=msvc -Vp %(Identity) | dot -Tsvg -o %(RelativeDir)Cfg.svg)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)Cfg.cpp; %(RelativeDir)Cfg.svg</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ragel: %(Identity) =^&gt; %(RelativeDir)Cfg.cpp</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ragel: %(Identity) =^&gt; %(RelativeDir)Cfg.cpp</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)Cfg.rl; %(RelativeDir)Cfg.hpp</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)Cfg.rl; %(RelativeDir)Cfg.hpp</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Ets2\Parser\Cfg.rl">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ragel -L -G2 --error-format=msvc %(Identity).hpp -o %(RelativeDir)%(FileName).hpp &amp; ragel -L -G2 --error-format=msvc %(Identity).cpp -o %(RelativeDir)%(FileName).cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating State Machine from %(Identity)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\%(FileName).hpp; .\%(FileName).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ragel -L -G2 --error-format=msvc %(Identity).hpp -o %(RelativeDir)%(FileName).hpp &amp; ragel -L -G2 --error-format=msvc %(Identity).cpp -o %(RelativeDir)%(FileName).cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating State Machine from %(Identity)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\%(FileName).hpp; .\%(FileName).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\%(FileName).rl.hpp; .\%(FileName).rl.cpp</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\%(FileName).rl.hpp; .\%(FileName).rl.cpp</AdditionalInputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+    </None>
+    <None Include="src\Ets2\Parser\SiiText.rl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
