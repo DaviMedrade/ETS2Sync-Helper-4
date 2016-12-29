@@ -71,7 +71,8 @@ namespace Ets2 {
 			DEBUG_LOG(L"Error reading save file '%s'", fileName);
 			return false;
 		}
-		//write_file(data, fileName + L".raw.txt");
+		// Save the original save, unencrypted
+		write_file(data, fileName + L".raw.txt");
 		//exit(0);
 		std::string currentCompany;
 		Job blankJob;
