@@ -154,6 +154,12 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 		}
 		dlcParam += L"hpower";
 	}
+	if (mDlcs & Ets2::Save::DLC_FRANCE) {
+		if (!dlcParam.empty()) {
+			dlcParam += L",";
+		}
+		dlcParam += L"fr";
+	}
 	syncUrl += L"&dlcs=" + dlcParam;
 
 	SYNC_DEBUG_LOG(L"Downloading from URL: %s", syncUrl);

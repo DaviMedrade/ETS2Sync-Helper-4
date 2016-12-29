@@ -13,6 +13,7 @@ namespace Ets2 {
 	const std::wstring Save::DEPEND_SCANDINAVIA = L"dlc|eut2_north|";
 	const std::wstring Save::DEPEND_GOINGEAST = L"dlc|eut2_east|";
 	const std::wstring Save::DEPEND_HIGHPOWERCARGO = L"rdlc|eut2_trailers|";
+	const std::wstring Save::DEPEND_FRANCE = L"dlc|eut2_fr|";
 	const std::string Save::ECONOMY_UNIT = "economy";
 	const std::string Save::GAME_TIME_ATTRIBUTE = "game_time";
 	const std::string Save::COMPANY_UNIT = "company";
@@ -52,6 +53,8 @@ namespace Ets2 {
 				mDlcs |= DLC_GOINGEAST;
 			} else if (wideValue.find(DEPEND_HIGHPOWERCARGO) == 0) {
 				mDlcs |= DLC_HIGHPOWERCARGO;
+			} else if (wideValue.find(DEPEND_FRANCE) == 0) {
+				mDlcs |= DLC_FRANCE;
 			}
 		}
 	}

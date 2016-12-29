@@ -13,6 +13,7 @@ private:
 	wxCheckBox * mCheckScandinavia;
 	wxCheckBox * mCheckGoingEast;
 	wxCheckBox * mCheckHighPowerCargo;
+	wxCheckBox * mCheckFrance;
 	const Ets2::Save * mSave;
 
 	void setCheckboxDlcPresent(wxCheckBox * checkbox, bool present);

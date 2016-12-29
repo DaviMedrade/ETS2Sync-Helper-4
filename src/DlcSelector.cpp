@@ -21,6 +21,11 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 
 	controlsSizer->AddSpacer(wxDLG_UNIT(this, wxPoint(0, 4)).y);
 
+	mCheckFrance = new wxCheckBox(this, wxID_ANY, "Vive la France!");
+	controlsSizer->Add(mCheckFrance, wxSizerFlags().Proportion(1));
+
+	controlsSizer->AddSpacer(wxDLG_UNIT(this, wxPoint(0, 4)).y);
+
 	mCheckHighPowerCargo = new wxCheckBox(this, wxID_ANY, "High Power Cargo Pack");
 	controlsSizer->Add(mCheckHighPowerCargo, wxSizerFlags().Proportion(1));
 }
@@ -35,6 +40,7 @@ void DlcSelector::setSave(const Ets2::Save * save) {
 	setCheckboxDlcPresent(mCheckScandinavia, (dlcs & Ets2::Save::DLC_SCANDINAVIA) != 0);
 	setCheckboxDlcPresent(mCheckGoingEast, (dlcs & Ets2::Save::DLC_GOINGEAST) != 0);
 	setCheckboxDlcPresent(mCheckHighPowerCargo, (dlcs & Ets2::Save::DLC_HIGHPOWERCARGO) != 0);
+	setCheckboxDlcPresent(mCheckFrance, (dlcs & Ets2::Save::DLC_FRANCE) != 0);
 }
 
 int DlcSelector::getDlcs() {
@@ -47,6 +53,9 @@ int DlcSelector::getDlcs() {
 	}
 	if (mCheckHighPowerCargo->IsChecked()) {
 		dlcs |= Ets2::Save::DLC_HIGHPOWERCARGO;
+	}
+	if (mCheckFrance->IsChecked()) {
+		dlcs |= Ets2::Save::DLC_FRANCE;
 	}
 	DEBUG_LOG("Selected DLCs: 0x%x", dlcs);
 	return dlcs;
