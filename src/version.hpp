@@ -3,7 +3,7 @@
 #include <string>
 
 // put this here so it's easier to bump
-#define THIS_APP_VERSION L"4.0.1"
+#define THIS_APP_VERSION L"4.1.0"
 
 const std::wstring APP_NAME = L"ETS2SyncHelper";
 const std::wstring APP_DISPLAY_NAME = L"ETS2Sync Helper";
