@@ -60,11 +60,11 @@ AboutWindow::AboutWindow(MainWindow * wndParent)
 	infoSizer->AddSpacer(border.y);
 
 	wxBoxSizer * creatorSizer = new wxBoxSizer(wxHORIZONTAL);
-	creatorSizer->Add(new wxStaticText(this, wxID_ANY, "Programming: "));
+	creatorSizer->Add(new wxStaticText(this, wxID_ANY, "Developer: "));
 	creatorSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, "David Santos", "https://github.com/davidsantos-br/"));
 	infoSizer->Add(creatorSizer);
 
-	wxBoxSizer * jobListSizer = new wxBoxSizer(wxHORIZONTAL);
+	/*wxBoxSizer * jobListSizer = new wxBoxSizer(wxHORIZONTAL);
 	jobListSizer->Add(new wxStaticText(this, wxID_ANY, "Job List: "));
 	jobListSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, "ETS2 Job Sync", "http://www.ets2sync.com/"));
 	infoSizer->Add(jobListSizer);
@@ -72,7 +72,7 @@ AboutWindow::AboutWindow(MainWindow * wndParent)
 	wxBoxSizer * translatorSizer = new wxBoxSizer(wxHORIZONTAL);
 	translatorSizer->Add(new wxStaticText(this, wxID_ANY, "English Translation: "));
 	translatorSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, "David Santos", "https://github.com/davidsantos-br/"));
-	infoSizer->Add(translatorSizer);
+	infoSizer->Add(translatorSizer);*/
 
 	infoSizer->AddSpacer(border.y);
 
