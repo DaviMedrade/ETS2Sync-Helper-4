@@ -7,7 +7,8 @@
 template <class T> class ObjectSelector : public Ets2StaticBox {
 public:
 	ObjectSelector<T> (wxWindow * parent, wxWindowID id)
-		: Ets2StaticBox(parent, id, mLabel) {
+		: Ets2StaticBox(parent, id, L"") {
+
 		wxBoxSizer * contentSizer = getContentSizer();
 
 		mStatusText = new StatusText(this, wxID_ANY);
@@ -25,6 +26,9 @@ public:
 	}
 
 	void setList(const Ets2::ObjectList<T> * list) {
+		std::wstring gameString = getEts2Info()->getGame() == Ets2::Game::GAME_ATS ? L"ATS" : L"ETS2";
+		SetLabel(wxString::Format(mLabel, gameString));
+
 		if (!list) {
 			mStatusText->SetLabel(L"", StatusText::TYPE_STATUS);
 			mCombobox->clearList();
@@ -34,7 +38,8 @@ public:
 		size_t numObjects = list->size();
 
 		wxString& formatString = (numObjects == 0 ? mFormatZero : (numObjects == 1 ? mFormatOne : mFormatPlural));
-		mStatusText->SetLabel(wxString::Format(formatString, numObjects), numObjects == 0 ? StatusText::TYPE_ERROR : StatusText::TYPE_SUCCESS);
+		wxString formattedString = (numObjects > 1 ? wxString::Format(formatString, numObjects, gameString) : wxString::Format(formatString, gameString));
+		mStatusText->SetLabel(formattedString, numObjects == 0 ? StatusText::TYPE_ERROR : StatusText::TYPE_SUCCESS);
 
 		mCombobox->setList(list);
 		if (numObjects == 0) {

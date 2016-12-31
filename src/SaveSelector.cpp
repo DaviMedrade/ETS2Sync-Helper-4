@@ -3,10 +3,10 @@
 
 wxDEFINE_EVENT(EVT_SAVE_SELECTED, wxCommandEvent);
 
-wxString SaveSelector::mLabel = "Select Save";
-wxString SaveSelector::mFormatZero = "No saves found.";
-wxString SaveSelector::mFormatOne = "1 save.";
-wxString SaveSelector::mFormatPlural = "%u saves.";
+wxString SaveSelector::mLabel = "Select %ls Save";
+wxString SaveSelector::mFormatZero = "No %ls saves found.";
+wxString SaveSelector::mFormatOne = "1 %ls save.";
+wxString SaveSelector::mFormatPlural = "%u %ls saves.";
 
 template <> const Ets2::SaveList * SaveSelector::getList() {
 	Ets2::Info * ets2Info = getEts2Info();

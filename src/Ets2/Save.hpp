@@ -32,6 +32,7 @@ namespace Ets2 {
 
 		typedef std::map<std::string, std::vector<Job>> JobList;
 
+		void setGame(Game game);
 		int getDlcs() const;
 		bool replaceJobList(const JobList& jobs, const std::function<bool(int progress)>& callback) const;
 

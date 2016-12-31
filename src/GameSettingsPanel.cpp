@@ -32,8 +32,20 @@ GameSettingsPanel::GameSettingsPanel(wxWindow * parent, wxWindowID id)
 	mainSizer->AddGrowableCol(1, 1);
 	contentSizer->Add(mainSizer, wxSizerFlags().Expand());
 
+	// Game
+	mainSizer->Add(new wxStaticText(this, wxID_ANY, L"Game:", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT), wxSizerFlags().CenterVertical().Expand());
+	wxSizer * gameSizer = new wxBoxSizer(wxHORIZONTAL);
+	mainSizer->Add(gameSizer);
+	mGameEts2 = new wxRadioButton(this, wxID_ANY, L"ETS2");
+	mGameAts = new wxRadioButton(this, wxID_ANY, L"ATS");
+	gameSizer->Add(mGameEts2);
+	gameSizer->Add(mGameAts);
+
+	mGameEts2->Bind(wxEVT_RADIOBUTTON, [this](wxCommandEvent&) { setGame(Ets2::Game::GAME_ETS2); });
+	mGameAts->Bind(wxEVT_RADIOBUTTON, [this](wxCommandEvent&) { setGame(Ets2::Game::GAME_ATS); });
+
 	// Settings Folder
-	mainSizer->Add(new wxStaticText(this, wxID_ANY, L"ETS2 Settings Folder:", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT), wxSizerFlags().CenterVertical().Expand());
+	mainSizer->Add(new wxStaticText(this, wxID_ANY, L"Settings Folder:", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT), wxSizerFlags().CenterVertical().Expand());
 
 	mConfigDirSizer = new wxBoxSizer(wxHORIZONTAL);
 	mainSizer->Add(mConfigDirSizer, wxSizerFlags().Expand());
@@ -69,10 +81,31 @@ GameSettingsPanel::GameSettingsPanel(wxWindow * parent, wxWindowID id)
 
 	mStatusText = new StatusText(this, wxID_ANY);
 	contentSizer->Add(mStatusText);
+
+	setGame(Ets2::Game::GAME_ETS2, false);
 }
 
 GameSettingsPanel::~GameSettingsPanel() {
 	wxDELETE(mConfigDirOptionsMenu);
+}
+
+Ets2::Game GameSettingsPanel::getGame() {
+	return mGame;
+}
+
+void GameSettingsPanel::setGame(Ets2::Game game, bool sendEvent) {
+	mGame = game;
+	if (game == Ets2::Game::GAME_ATS) {
+		mGameAts->SetValue(true);
+		mGameEts2->SetValue(false);
+	} else {
+		mGameAts->SetValue(false);
+		mGameEts2->SetValue(true);
+	}
+	if (sendEvent) {
+		setConfigDirText(Ets2::Info::getDefaultDirectory(game));
+		QueueEvent(new wxCommandEvent(EVT_CONFIG_DIR_CHANGED, GetId()));
+	}
 }
 
 void GameSettingsPanel::onConfigDirOptions() {
@@ -90,13 +123,13 @@ void GameSettingsPanel::onConfigDirOptionSelected(wxCommandEvent& event) {
 		wxLaunchDefaultApplication(getEts2Info()->getConfigFileName());
 		return;
 	case MENU_ID_CONFIG_DIR_DEFAULT:
-		dir = Ets2::Info::getDefaultDirectory();
+		dir = Ets2::Info::getDefaultDirectory(getGame());
 		break;
 	case MENU_ID_CONFIG_DIR_CHECK_AGAIN:
 		dir = mConfigDirText->GetLabel();
 		break;
 	case MENU_ID_CONFIG_DIR_CHANGE:
-		wxDirDialog dlg(this, L"Select the ETS2 Settings folder", getDirectory(), wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
+		wxDirDialog dlg(this, L"Select the Game Settings folder", getDirectory(), wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
 		if (dlg.ShowModal() == wxID_OK) {
 			dir = dlg.GetPath();
 		} else {
@@ -104,8 +137,9 @@ void GameSettingsPanel::onConfigDirOptionSelected(wxCommandEvent& event) {
 		}
 		break;
 	}
-	mConfigDirText->SetLabel(dir);
-	mConfigDirText->SetMaxSize(wxSize(mConfigDirSizer->GetSize().x - mConfigDirOptionsButton->GetSize().x - mConfigDirSeparator->GetSize().x, -1));
+	/*mConfigDirText->SetLabel(dir);
+	mConfigDirText->SetMaxSize(wxSize(mConfigDirSizer->GetSize().x - mConfigDirOptionsButton->GetSize().x - mConfigDirSeparator->GetSize().x, -1));*/
+	setConfigDirText(dir);
 	QueueEvent(new wxCommandEvent(EVT_CONFIG_DIR_CHANGED, GetId()));
 }
 
@@ -113,7 +147,7 @@ void GameSettingsPanel::updateFromEts2Info() {
 	Ets2::Info * ets2Info = getEts2Info();
 
 	wxFileName dir = wxFileName::DirName(ets2Info->getDirectory());
-	bool isDefaultDir = dir.SameAs(wxFileName::DirName(Ets2::Info::getDefaultDirectory()));
+	bool isDefaultDir = dir.SameAs(wxFileName::DirName(Ets2::Info::getDefaultDirectory(getGame())));
 	mConfigDirOptionOpen->Enable(dir.Exists());
 	mConfigDirOptionOpenFile->Enable(ets2Info->isValid());
 	mConfigDirOptionDefault->Enable(!isDefaultDir);
@@ -167,7 +201,7 @@ void GameSettingsPanel::updateFromEts2Info() {
 		mSaveFormatText->SetLabel(L"Not found");
 		mSaveFormatSeparator->Hide();
 		mFixSaveFormatButton->Hide();
-		mStatusText->SetLabel(L"ETS2 settings were not found in the directory above.", StatusText::TYPE_ERROR);
+		mStatusText->SetLabel(L"Game settings were not found in the directory above.", StatusText::TYPE_ERROR);
 		Layout();
 	}
 }

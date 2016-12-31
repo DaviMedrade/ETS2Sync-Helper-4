@@ -28,6 +28,10 @@ namespace Ets2 {
 		//DEBUG_LOG(L"%s: Initialized in %lld µs", mName, initTime.TimeInMicro());
 	};
 
+	void Save::setGame(Game game) {
+		mGame = game;
+	}
+
 	int Save::getDlcs() const {
 		return mDlcs;
 	}

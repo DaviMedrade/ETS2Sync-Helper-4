@@ -21,8 +21,13 @@ public:
 
 	void updateFromEts2Info() override;
 	wxString getDirectory();
+	Ets2::Game getGame();
+	void setGame(Ets2::Game game, bool sendEvend = true);
 
 private:
+	Ets2::Game mGame;
+	wxRadioButton * mGameEts2;
+	wxRadioButton * mGameAts;
 	wxBoxSizer * mConfigDirSizer;
 	wxStaticText * mConfigDirText;
 	wxStaticText * mConfigDirSeparator;

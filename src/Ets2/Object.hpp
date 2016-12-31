@@ -6,6 +6,8 @@
 #include <memory>
 
 namespace Ets2 {
+	enum Game : unsigned int;
+
 	class Object {
 	public:
 		Object(const std::wstring& siiFileBasename);
@@ -27,12 +29,14 @@ namespace Ets2 {
 
 		bool isValid();
 		std::wstring getDirectory() const;
+		Game getGame() const;
 		std::wstring getName() const;
 		time_t getSaveTime() const;
 		const std::wstring getSaveTimeCaption() const;
 
 	protected:
 		std::wstring mDirectory;
+		Game mGame;
 		std::wstring mName;
 		time_t mSaveTime;
 

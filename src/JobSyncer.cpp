@@ -1,6 +1,7 @@
 #include "precomp.hpp"
 #include "JobSyncer.hpp"
 
+#include "Ets2/Info.hpp"
 #include "ShowLastWindowsError.hpp"
 #include "version.hpp"
 
@@ -138,29 +139,35 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 	setStatus(SET_ALL, STATE_DOWNLOADING, PROGRESS_UNDEFINED, L"Connecting to the server…");
 
 	std::wstring syncUrl = APP_URL_SYNC;
+	std::wstring gameParam = L"";
 	std::wstring dlcParam = L"";
-	if (mDlcs & Ets2::Save::DLC_SCANDINAVIA) {
-		dlcParam += L"north";
-	}
-	if (mDlcs & Ets2::Save::DLC_GOINGEAST) {
-		if (!dlcParam.empty()) {
-			dlcParam += L",";
+	if (mSave->getGame() == Ets2::Game::GAME_ATS) {
+		gameParam = L"ats";
+	} else {
+		gameParam = L"ets2";
+		if (mDlcs & Ets2::Save::DLC_SCANDINAVIA) {
+			dlcParam += L"north";
 		}
-		dlcParam += L"east";
-	}
-	if (mDlcs & Ets2::Save::DLC_HIGHPOWERCARGO) {
-		if (!dlcParam.empty()) {
-			dlcParam += L",";
+		if (mDlcs & Ets2::Save::DLC_GOINGEAST) {
+			if (!dlcParam.empty()) {
+				dlcParam += L",";
+			}
+			dlcParam += L"east";
 		}
-		dlcParam += L"hpower";
-	}
-	if (mDlcs & Ets2::Save::DLC_FRANCE) {
-		if (!dlcParam.empty()) {
-			dlcParam += L",";
+		if (mDlcs & Ets2::Save::DLC_HIGHPOWERCARGO) {
+			if (!dlcParam.empty()) {
+				dlcParam += L",";
+			}
+			dlcParam += L"hpower";
 		}
-		dlcParam += L"fr";
+		if (mDlcs & Ets2::Save::DLC_FRANCE) {
+			if (!dlcParam.empty()) {
+				dlcParam += L",";
+			}
+			dlcParam += L"fr";
+		}
 	}
-	syncUrl += L"&dlcs=" + dlcParam;
+	syncUrl += L"&game=" + gameParam + L"&dlcs=" + dlcParam;
 
 	SYNC_DEBUG_LOG(L"Downloading from URL: %s", syncUrl);
 	HINTERNET urlHandle = InternetOpenUrl(mInternetHandle, syncUrl.data(), NULL, (DWORD)-1,

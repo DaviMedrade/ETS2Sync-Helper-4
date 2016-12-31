@@ -88,7 +88,7 @@ MainWindow::MainWindow(const wxString& title)
 	mFSTimer->SetOwner(this);
 	Bind(wxEVT_TIMER, [this](wxTimerEvent&) { onFileSystemTimer(); }, mFSTimer->GetId());
 
-	updateEts2Info(Ets2::Info::getDefaultDirectory());
+	updateEts2Info(Ets2::Info::getDefaultDirectory(mGameSettingsPanel->getGame()));
 
 #if false // if working on the About window
 	// Just show the About window, then quit
@@ -106,7 +106,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::updateEts2Info(std::wstring directory) {
 	wxDELETE(mEts2Info);
-	mEts2Info = new Ets2::Info(directory);
+	mEts2Info = new Ets2::Info(mGameSettingsPanel->getGame(), directory);
 
 	mFSTimer->Stop();
 	wxDELETE(mFSWatcher);

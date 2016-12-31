@@ -17,7 +17,8 @@ namespace Ets2 {
 		static const std::string NAME_ATTRIBUTE;
 		static const std::string SAVE_TIME_ATTRIBUTE;
 		static const std::string MAP_ATTRIBUTE;
-		static const std::string MAP_VALUE;
+		static const std::string MAP_VALUE_ETS2;
+		static const std::string MAP_VALUE_ATS;
 
 		SaveList mSaves;
 		bool mMapValid;

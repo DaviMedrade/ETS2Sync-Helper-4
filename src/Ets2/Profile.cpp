@@ -1,5 +1,6 @@
 #include "precomp.hpp"
 #include "Profile.hpp"
+#include "Info.hpp"
 #include "lib/Utf8ToUtf16.hpp"
 
 #include <wx/dir.h>
@@ -9,7 +10,8 @@ namespace Ets2 {
 	const std::string Profile::NAME_ATTRIBUTE = "profile_name";
 	const std::string Profile::SAVE_TIME_ATTRIBUTE = "save_time";
 	const std::string Profile::MAP_ATTRIBUTE = "map_path";
-	const std::string Profile::MAP_VALUE = "/map/europe.mbd";
+	const std::string Profile::MAP_VALUE_ETS2 = "/map/europe.mbd";
+	const std::string Profile::MAP_VALUE_ATS = "/map/usa.mbd";
 
 	Profile::Profile(const std::wstring directory)
 		: Object(SII_BASENAME) {
@@ -31,6 +33,7 @@ namespace Ets2 {
 			if (saveDir.find("autosave") == std::string::npos) { // skip autosaves
 				Save * save = new Save((savesDir.GetNameWithSep() + saveDir).ToStdWstring());
 				if (save->isValid()) {
+					save->setGame(mGame);
 					mSaves.push_back(save);
 				} else {
 					delete save;
@@ -51,8 +54,12 @@ namespace Ets2 {
 			return;
 		}
 		if (attribute == MAP_ATTRIBUTE) {
-			if (value == MAP_VALUE) {
+			if (value == MAP_VALUE_ETS2) {
 				mMapValid = true;
+				mGame = Game::GAME_ETS2;
+			} else if (value == MAP_VALUE_ATS) {
+				mMapValid = true;
+				mGame = Game::GAME_ATS;
 			}
 		}
 		if (mName.empty() && attribute == NAME_ATTRIBUTE) {

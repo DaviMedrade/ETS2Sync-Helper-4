@@ -3,10 +3,10 @@
 
 wxDEFINE_EVENT(EVT_PROFILE_SELECTED, wxCommandEvent);
 
-wxString ProfileSelector::mLabel = "Select Profile";
-wxString ProfileSelector::mFormatZero = "No profiles found.";
-wxString ProfileSelector::mFormatOne = "1 profile.";
-wxString ProfileSelector::mFormatPlural = "%u profiles.";
+wxString ProfileSelector::mLabel = "Select %ls Profile";
+wxString ProfileSelector::mFormatZero = "No %ls profiles found.";
+wxString ProfileSelector::mFormatOne = "1 %ls profile.";
+wxString ProfileSelector::mFormatPlural = "%u %ls profiles.";
 
 template <> const Ets2::ProfileList * ProfileSelector::getList() {
 	Ets2::Info * ets2Info = getEts2Info();

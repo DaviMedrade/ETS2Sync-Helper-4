@@ -46,6 +46,10 @@ namespace Ets2 {
 		return mDirectory;
 	}
 
+	Game Object::getGame() const {
+		return mGame;
+	}
+
 	std::wstring Object::getName() const {
 		return mName;
 	}

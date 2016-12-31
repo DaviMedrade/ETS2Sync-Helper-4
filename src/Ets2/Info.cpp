@@ -11,14 +11,15 @@
 namespace Ets2 {
 	const std::string Info::SAVE_FORMAT_VAR_NAME = "g_save_format";
 
-	std::wstring Info::getDefaultDirectory() {
+	std::wstring Info::getDefaultDirectory(Game game) {
 		wxStandardPaths standardPaths = wxStandardPaths::Get();
-		return std::wstring(standardPaths.GetDocumentsDir().Append(L"\\Euro Truck Simulator 2"));
+		return std::wstring(standardPaths.GetDocumentsDir().Append(game == Game::GAME_ATS ? L"\\American Truck Simulator" : L"\\Euro Truck Simulator 2"));
 	}
 
-	Info::Info(const std::wstring directory) {
+	Info::Info(Game game, const std::wstring directory) {
 		wxStopWatch initTime;
 		mDirectory = directory;
+		mGame = game;
 		mProfiles = ProfileList();
 
 		wxFileName configFileName(mDirectory + L"\\config.cfg");
@@ -39,7 +40,7 @@ namespace Ets2 {
 		bool fileFound = profilesDir.GetFirst(&profileDir, L"*", wxDIR_DIRS);
 		while (fileFound) {
 			Profile * profile = new Profile((profilesDir.GetNameWithSep() + profileDir).ToStdWstring());
-			if (profile->isValid()) {
+			if (profile->isValid() && profile->getGame() == mGame) {
 				mProfiles.push_back(profile);
 			} else {
 				delete profile;
@@ -51,7 +52,7 @@ namespace Ets2 {
 	}
 
 	Info::Info(Info& info) {
-		Info::Info(info.getDirectory());
+		Info::Info(info.getGame(), info.getDirectory());
 	}
 
 	bool Info::isValid() {
@@ -64,6 +65,10 @@ namespace Ets2 {
 
 	std::wstring Info::getConfigFileName() {
 		return mConfigFileName;
+	}
+
+	Game Info::getGame() const {
+		return mGame;
 	}
 
 	Info::SaveFormat Info::getSaveFormat() {
