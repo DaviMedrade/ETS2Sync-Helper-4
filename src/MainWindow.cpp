@@ -73,6 +73,14 @@ MainWindow::MainWindow(const wxString& title)
 	mClearJobsButton = new wxButton(panel, wxID_ANY, L"Clear Jobs");
 	closeSizer->Add(mClearJobsButton);
 	mClearJobsButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) { onClearJobs(); });
+	mClearJobsButton->SetToolTip(L"Clears the Freight Market, allowing the game to generate new, unsynced jobs.");
+
+	closeSizer->AddSpacer(wxDLG_UNIT(panel, wxPoint(4, 4)).y);
+
+	mResetEconomyButton = new wxButton(panel, wxID_ANY, L"Reset Economy");
+	closeSizer->Add(mResetEconomyButton);
+	mResetEconomyButton->Bind(wxEVT_BUTTON, [this](wxCommandEvent&) { onResetEconomy(); });
+	mResetEconomyButton->SetToolTip(L"Makes the save trigger an economy reset when loaded. That generates new, unsynced jobs and moves your truck to your home garage.");
 
 	closeSizer->AddStretchSpacer();
 
@@ -204,6 +212,14 @@ void MainWindow::onClearJobs() {
 	mFSTimer->Stop();
 	wxDELETE(mFSWatcher);
 	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getDlcs(), JobSyncer::SyncType::CLEAR);
+	wxDELETE(mSyncDialog);
+	updateEts2Info(mEts2Info->getDirectory());
+}
+
+void MainWindow::onResetEconomy() {
+	mFSTimer->Stop();
+	wxDELETE(mFSWatcher);
+	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getDlcs(), JobSyncer::SyncType::RESET_ECONOMY);
 	wxDELETE(mSyncDialog);
 	updateEts2Info(mEts2Info->getDirectory());
 }

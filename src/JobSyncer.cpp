@@ -107,6 +107,18 @@ wxThread::ExitCode JobSyncer::Entry() {
 			}
 			return (wxThread::ExitCode)1;
 		}
+	} else if (mSyncType == SyncType::RESET_ECONOMY) {
+		Ets2::Save::Job job;
+		job.cargo = "invalid";
+		job.companyTruck = "invalid";
+		job.variant = 100;
+		job.target = "invalid.invalid";
+		job.urgency = 0;
+		job.distance = 1000;
+		job.ferryPrice = 1000;
+		job.ferryTime = 100;
+		jobs.clear();
+		jobs[mSave->getGame() == Ets2::Game::ETS2 ? "sanbuilders.hamburg" : "vm_car_dlr.las_vegas"].push_back(job);
 	}
 
 	setStatus(SET_STATE | SET_MESSAGE, State::INSERTING_JOBS, 0, L"");

@@ -11,7 +11,8 @@ class JobSyncer : public wxEvtHandler, public wxThreadHelper {
 public:
 	enum class SyncType {
 		SYNC,
-		CLEAR
+		CLEAR,
+		RESET_ECONOMY
 	};
 	JobSyncer(wxEvtHandler * eventHandler, SyncType syncType);
 	~JobSyncer();

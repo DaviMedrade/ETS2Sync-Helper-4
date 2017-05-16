@@ -37,6 +37,7 @@ private:
 	DlcSelector * mDlcSelector;
 	wxButton * mSyncButton;
 	wxButton * mClearJobsButton;
+	wxButton * mResetEconomyButton;
 	SyncDialog * mSyncDialog;
 
 	const Ets2::Profile * getSelectedProfile() const;
@@ -51,5 +52,6 @@ private:
 	void onSaveChanged();
 	void onSync();
 	void onClearJobs();
+	void onResetEconomy();
 };
 

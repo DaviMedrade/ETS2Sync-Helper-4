@@ -35,6 +35,7 @@ namespace Ets2 {
 
 		void setGame(Game game);
 		int getDlcs() const;
+		static void setupBlankJob(Job& job);
 		bool replaceJobList(const JobList& jobs, const std::function<bool(int progress)>& callback) const;
 
 	private:

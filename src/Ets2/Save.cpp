@@ -67,6 +67,17 @@ namespace Ets2 {
 		return true;
 	}
 
+	void Save::setupBlankJob(Job& job) {
+		job.cargo = "null";
+		job.companyTruck = "";
+		job.variant = -1;
+		job.target = "";
+		job.urgency = -1;
+		job.distance = 0;
+		job.ferryPrice = 0;
+		job.ferryTime = 0;
+	}
+
 	bool Save::replaceJobList(const JobList& jobs, const std::function<bool(int progress)>& callback) const {
 		if (!callback(0)) {
 			return false;
@@ -83,14 +94,7 @@ namespace Ets2 {
 		//exit(0);
 		std::string currentCompany;
 		Job blankJob;
-		blankJob.cargo = "null";
-		blankJob.companyTruck = "";
-		blankJob.variant = -1;
-		blankJob.target = "";
-		blankJob.urgency = -1;
-		blankJob.distance = 0;
-		blankJob.ferryPrice = 0;
-		blankJob.ferryTime = 0;
+		setupBlankJob(blankJob);
 		size_t companyJobIndex;
 		std::vector<Job> emptyJobList;
 		const std::vector<Job> * companyJobs = nullptr;
