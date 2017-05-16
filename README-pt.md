@@ -5,7 +5,7 @@
 
 Este é o repositório para o ETS2Sync Helper 4.0 em diante. O programa foi refeito do zero em C++, o que o tornou menor e mais rápido.
 
-Este programa sincroniza a lista de cargas do Euro Truck Simulator 2, facilitando a organização de comboios no Multiplayer.
+Este programa sincroniza a lista de cargas do Euro Truck Simulator 2 ou American Truck Simulator, facilitando a organização de comboios no Multiplayer.
 
 No momento, o programa só está disponível em inglês. Pode ser que outros idiomas sejam (re-)adicionados no futuro.
 

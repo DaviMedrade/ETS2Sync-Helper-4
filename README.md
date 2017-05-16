@@ -5,7 +5,7 @@
 
 This is the repository for ETS2Sync helper 4.0 and newer. The program has been rewritten from scratch in C++, making it smaller and faster.
 
-This app synchronizes the job list on Euro Truck Simulator 2, in order to make it easier to organize a convoy on Multiplayer.
+This app synchronizes the job list on Euro Truck Simulator 2 or American Truck Simulator, in order to make it easier to organize a convoy on Multiplayer.
 
 As of now, the app is available only in English. Other languages might be (re-)added in the future.
 
