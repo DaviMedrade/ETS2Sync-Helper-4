@@ -13,7 +13,7 @@ namespace Ets2 {
 
 	std::wstring Info::getDefaultDirectory(Game game) {
 		wxStandardPaths standardPaths = wxStandardPaths::Get();
-		return std::wstring(standardPaths.GetDocumentsDir().Append(game == Game::GAME_ATS ? L"\\American Truck Simulator" : L"\\Euro Truck Simulator 2"));
+		return std::wstring(standardPaths.GetDocumentsDir().Append(game == Game::ATS ? L"\\American Truck Simulator" : L"\\Euro Truck Simulator 2"));
 	}
 
 	Info::Info(Game game, const std::wstring directory) {
@@ -96,20 +96,20 @@ namespace Ets2 {
 		::read_file(mConfigFileName, configFileContents);
 		std::string newConfigFile;
 		std::string currentLine;
-		mSaveFormat = SAVE_FORMAT_NOT_FOUND;
+		mSaveFormat = SaveFormat::NOT_FOUND;
 		std::string newFormatLine;
-		if (newFormat != SAVE_FORMAT_INVALID) {
+		if (newFormat != SaveFormat::INVALID) {
 			newFormatLine.append("uset ");
 			newFormatLine.append(SAVE_FORMAT_VAR_NAME);
 			newFormatLine.append(" \"");
-			newFormatLine.append(std::to_string(newFormat));
+			newFormatLine.append(std::to_string(static_cast<int>(newFormat)));
 			newFormatLine.append("\"");
 		}
 		bool formatLineAppended = false;
 		Parser::Cfg::parse(configFileContents, [this, &newFormat, &newConfigFile, &newFormatLine, &formatLineAppended](const std::string& line, const std::string& name, const std::string& value) {
 			bool lineChanged = false;
 			if (name == SAVE_FORMAT_VAR_NAME) {
-				if (newFormat == SAVE_FORMAT_INVALID) {
+				if (newFormat == SaveFormat::INVALID) {
 					Utf8ToUtf16(value.data(), value.length(), mRawSaveFormat);
 					long saveFormat;
 					try {
@@ -119,16 +119,16 @@ namespace Ets2 {
 					}
 					switch (saveFormat) {
 					case 0: case 1:
-						mSaveFormat = SAVE_FORMAT_BINARY;
+						mSaveFormat = SaveFormat::BINARY;
 						break;
 					case 2:
-						mSaveFormat = SAVE_FORMAT_TEXT;
+						mSaveFormat = SaveFormat::TEXT;
 						break;
 					case 3:
-						mSaveFormat = SAVE_FORMAT_BOTH;
+						mSaveFormat = SaveFormat::BOTH;
 						break;
 					default:
-						mSaveFormat = SAVE_FORMAT_INVALID;
+						mSaveFormat = SaveFormat::INVALID;
 					}
 				} else {
 					newConfigFile.append(newFormatLine);
@@ -137,13 +137,13 @@ namespace Ets2 {
 					lineChanged = true;
 				}
 			}
-			if (newFormat != SAVE_FORMAT_INVALID && !lineChanged) {
+			if (newFormat != SaveFormat::INVALID && !lineChanged) {
 				newConfigFile.append(line);
 				newConfigFile.append("\r\n");
 			}
 		});
 
-		if (newFormat != SAVE_FORMAT_INVALID) {
+		if (newFormat != SaveFormat::INVALID) {
 			if (!formatLineAppended) {
 				newConfigFile.append(newFormatLine);
 				newConfigFile.append("\r\n");

@@ -123,15 +123,15 @@ void AboutWindow::onUpdateStatus() {
 	UpdateChecker::Status status = mUpdateChecker->getStatus();
 
 	StatusText::Type statusTextType;
-	if (status.state == UpdateChecker::STATE_RUNNING) {
-		statusTextType = StatusText::TYPE_STATUS;
-	} else if (status.state == UpdateChecker::STATE_FINISHED && status.result == UpdateChecker::RESULT_UP_TO_DATE) {
-		statusTextType = StatusText::TYPE_SUCCESS;
+	if (status.state == UpdateChecker::State::RUNNING) {
+		statusTextType = StatusText::Type::STATUS;
+	} else if (status.state == UpdateChecker::State::FINISHED && status.result == UpdateChecker::Result::UP_TO_DATE) {
+		statusTextType = StatusText::Type::SUCCESS;
 	} else {
-		statusTextType = StatusText::TYPE_ERROR;
+		statusTextType = StatusText::Type::FAILURE;
 	}
 	mCheckStatusText->SetLabel(UpdateChecker::getStatusDescription(status), statusTextType);
-	if (status.state != UpdateChecker::STATE_RUNNING) {
+	if (status.state != UpdateChecker::State::RUNNING) {
 		if (mCheckingAnimation->IsShown()) {
 			mCheckingAnimation->Stop();
 			mCheckingAnimation->Hide();
@@ -155,7 +155,7 @@ void AboutWindow::onShow(wxShowEvent& weEvent) {
 }
 
 void AboutWindow::onUpdateCheckAgain() {
-	if (mUpdateChecker->getStatus().state == UpdateChecker::STATE_RUNNING) {
+	if (mUpdateChecker->getStatus().state == UpdateChecker::State::RUNNING) {
 		mUpdateChecker->cancel();
 	} else {
 		checkUpdates();

@@ -50,16 +50,16 @@ namespace Ets2 {
 	}
 
 	void Profile::processAttribute(Parser::Sii::Context context, const std::string& attribute, const std::string& value) {
-		if (context != Parser::Sii::CONTEXT_ATTRIBUTE) {
+		if (context != Parser::Sii::Context::ATTRIBUTE) {
 			return;
 		}
 		if (attribute == MAP_ATTRIBUTE) {
 			if (value == MAP_VALUE_ETS2) {
 				mMapValid = true;
-				mGame = Game::GAME_ETS2;
+				mGame = Game::ETS2;
 			} else if (value == MAP_VALUE_ATS) {
 				mMapValid = true;
-				mGame = Game::GAME_ATS;
+				mGame = Game::ATS;
 			}
 		}
 		if (mName.empty() && attribute == NAME_ATTRIBUTE) {

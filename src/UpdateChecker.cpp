@@ -7,19 +7,19 @@ wxDEFINE_EVENT(EVT_UPDATE_CHECKER, wxCommandEvent);
 
 std::wstring UpdateChecker::getStatusDescription(Status status) {
 	switch (status.state) {
-	case STATE_RUNNING:
+	case State::RUNNING:
 		return L"Checking for new versions…";
-	case STATE_CANCELED:
+	case State::CANCELED:
 		return L"Check for new versions canceled.";
-	case STATE_ERROR:
+	case State::FAILED:
 		return L"Error checking for new versions.";
-	case STATE_FINISHED:
+	case State::FINISHED:
 		switch (status.result) {
-		case RESULT_NEW_VERSION:
+		case Result::NEW_VERSION:
 			return L"A newer version is available.";
-		case RESULT_NEW_BUGFIX:
+		case Result::NEW_BUGFIX:
 			return L"A bugfix version is available";
-		case RESULT_UP_TO_DATE:
+		case Result::UP_TO_DATE:
 			return L"Your version is up-to-date.";
 		}
 		return L"Unknown result.";
@@ -51,21 +51,21 @@ UpdateChecker::Status UpdateChecker::getStatus() {
 void UpdateChecker::start() {
 	if (CreateThread(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR) {
 		wxLogError("Error checking for new versions\n\nCould not create worker thread.");
-		setStatus(SET_ALL, false, STATE_ERROR, RESULT_UNKNOWN);
+		setStatus(SET_ALL, false, State::FAILED, Result::UNKNOWN);
 		return;
 	}
 	if (GetThread()->Run() != wxTHREAD_NO_ERROR) {
 		wxLogError("Error checking for new versions\n\nCould not run worked thread.");
-		setStatus(SET_ALL, false, STATE_ERROR, RESULT_UNKNOWN);
+		setStatus(SET_ALL, false, State::FAILED, Result::UNKNOWN);
 		return;
 	}
-	setStatus(SET_ALL, false, STATE_RUNNING, RESULT_UNKNOWN);
+	setStatus(SET_ALL, false, State::RUNNING, Result::UNKNOWN);
 }
 
 void UpdateChecker::cancel() {
 	wxThread * thread = GetThread();
 	if (thread && thread->IsRunning()) {
-		setStatus(SET_CANCEL, true, STATE_UNKNOWN, RESULT_UNKNOWN);
+		setStatus(SET_CANCEL, true, State::UNKNOWN, Result::UNKNOWN);
 		thread->Wait();
 	}
 }
@@ -93,7 +93,7 @@ wxThread::ExitCode UpdateChecker::Entry() {
 		INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE | INTERNET_FLAG_NO_COOKIES, (DWORD_PTR)this);
 	if (urlHandle == NULL) {
 		ShowLastWindowsError(L"InternetOpenUrl");
-		setStatus(SET_STATE, false, STATE_ERROR, RESULT_UNKNOWN);
+		setStatus(SET_STATE, false, State::FAILED, Result::UNKNOWN);
 		return (wxThread::ExitCode)1;
 	}
 
@@ -153,19 +153,19 @@ wxThread::ExitCode UpdateChecker::Entry() {
 		bError = true;
 	}
 	if (bError || bCanceled) {
-		setStatus(SET_STATE, false, bCanceled ? STATE_CANCELED : STATE_ERROR, RESULT_UNKNOWN);
+		setStatus(SET_STATE, false, bCanceled ? State::CANCELED : State::FAILED, Result::UNKNOWN);
 	} else {
-		Result result = RESULT_UNKNOWN;
+		Result result = Result::UNKNOWN;
 		std::wstring resultStr;
 		resultStr.assign(vcData.begin(), vcData.end());
 		if (resultStr == L"outdated") {
-			result = RESULT_NEW_VERSION;
+			result = Result::NEW_VERSION;
 		} else if (resultStr == L"bugfix") {
-			result = RESULT_NEW_BUGFIX;
+			result = Result::NEW_BUGFIX;
 		} else if (resultStr == L"current") {
-			result = RESULT_UP_TO_DATE;
+			result = Result::UP_TO_DATE;
 		}
-		setStatus(SET_STATE | SET_RESULT, false, (result == RESULT_UNKNOWN) ? STATE_ERROR : STATE_FINISHED, result);
+		setStatus(SET_STATE | SET_RESULT, false, (result == Result::UNKNOWN) ? State::FAILED : State::FINISHED, result);
 	}
 	return (wxThread::ExitCode)0;
 }

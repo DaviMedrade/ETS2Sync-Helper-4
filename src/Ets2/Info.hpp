@@ -6,9 +6,9 @@
 #include <regex>
 
 namespace Ets2 {
-	enum Game : unsigned int {
-		GAME_ETS2,
-		GAME_ATS
+	enum class Game : unsigned int {
+		ETS2,
+		ATS
 	};
 
 	// Information from a ETS2 Settings directory
@@ -20,12 +20,12 @@ namespace Ets2 {
 
 		// Returns the default ETS2 Settings directory for the current user
 		// i.e. the current user's Documents\\Euro Truck Simulator 2
-		enum SaveFormat {
-			SAVE_FORMAT_BINARY = 0,
-			SAVE_FORMAT_TEXT = 2,
-			SAVE_FORMAT_BOTH = 3,
-			SAVE_FORMAT_INVALID = -1,
-			SAVE_FORMAT_NOT_FOUND = -2
+		enum class SaveFormat : int {
+			BINARY = 0,
+			TEXT = 2,
+			BOTH = 3,
+			INVALID = -1,
+			NOT_FOUND = -2
 		};
 
 		static std::wstring getDefaultDirectory(Game game);
@@ -56,6 +56,6 @@ namespace Ets2 {
 		// If called with SAVE_FORMAT_INVALID, reads the save format and
 		// sets mSaveFormat and mSaveFormatLine, otherwise changes the
 		// save format in the file.
-		void processSaveFormat(SaveFormat newFormat = SAVE_FORMAT_INVALID);
+		void processSaveFormat(SaveFormat newFormat = SaveFormat::INVALID);
 	};
 }

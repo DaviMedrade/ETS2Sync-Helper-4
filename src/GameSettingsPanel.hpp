@@ -11,7 +11,7 @@ public:
 	GameSettingsPanel(wxWindow * parent, wxWindowID id);
 	~GameSettingsPanel();
 
-	enum MENU_ID {
+	enum MenuId : int {
 		MENU_ID_CONFIG_DIR_OPEN = wxID_HIGHEST + 1,
 		MENU_ID_CONFIG_DIR_OPEN_FILE,
 		MENU_ID_CONFIG_DIR_CHANGE,

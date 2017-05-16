@@ -26,11 +26,11 @@ public:
 	}
 
 	void setList(const Ets2::ObjectList<T> * list) {
-		std::wstring gameString = getEts2Info()->getGame() == Ets2::Game::GAME_ATS ? L"ATS" : L"ETS2";
+		std::wstring gameString = getEts2Info()->getGame() == Ets2::Game::ATS ? L"ATS" : L"ETS2";
 		SetLabel(wxString::Format(mLabel, gameString));
 
 		if (!list) {
-			mStatusText->SetLabel(L"", StatusText::TYPE_STATUS);
+			mStatusText->SetLabel(L"", StatusText::Type::STATUS);
 			mCombobox->clearList();
 			return;
 		}
@@ -39,7 +39,7 @@ public:
 
 		wxString& formatString = (numObjects == 0 ? mFormatZero : (numObjects == 1 ? mFormatOne : mFormatPlural));
 		wxString formattedString = (numObjects > 1 ? wxString::Format(formatString, numObjects, gameString) : wxString::Format(formatString, gameString));
-		mStatusText->SetLabel(formattedString, numObjects == 0 ? StatusText::TYPE_ERROR : StatusText::TYPE_SUCCESS);
+		mStatusText->SetLabel(formattedString, numObjects == 0 ? StatusText::Type::FAILURE : StatusText::Type::SUCCESS);
 
 		mCombobox->setList(list);
 		if (numObjects == 0) {

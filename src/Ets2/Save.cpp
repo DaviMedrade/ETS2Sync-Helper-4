@@ -37,7 +37,7 @@ namespace Ets2 {
 	}
 
 	void Save::processAttribute(Parser::Sii::Context context, const std::string& attribute, const std::string& value) {
-		if (context != Parser::Sii::CONTEXT_ATTRIBUTE) {
+		if (context != Parser::Sii::Context::ATTRIBUTE) {
 			return;
 		}
 		if (mName.empty() && attribute == NAME_ATTRIBUTE) {
@@ -116,7 +116,7 @@ namespace Ets2 {
 		bool parseSuccess = File::parse(data, [&](const Parser::Sii::Context context, const std::string& name, const std::string& value, const std::string& sourceValue, unsigned long offset) -> bool {
 			//DEBUG_LOG("context: %d, name: \"%s\", value: \"%s\", sourceValue: \"%s\", offset: %d", context, name, value, sourceValue, offset);
 			lastOffset = offset;
-			if (context == Parser::Sii::CONTEXT_UNIT_START) {
+			if (context == Parser::Sii::Context::UNIT_START) {
 				newSaveData.append("\r\n").append(name).append(" : ").append(value).append(" {\r\n");
 				if (!hasGameTime && name == ECONOMY_UNIT) {
 					inEconomy = true;
@@ -148,7 +148,7 @@ namespace Ets2 {
 					}
 					//DEBUG_LOG("Current job: %d (%p) - %s to %s", companyJobIndex, currentJob, currentJob->cargo, currentJob->target);
 				}
-			} else if (context == Parser::Sii::CONTEXT_UNIT_END) {
+			} else if (context == Parser::Sii::Context::UNIT_END) {
 				inEconomy = false;
 				if (inJob) {
 					++companyJobIndex;

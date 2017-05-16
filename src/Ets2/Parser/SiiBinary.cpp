@@ -185,13 +185,13 @@ namespace Ets2::Parser::Sii {
 			}
 			sourceValue.clear();
 			readUnitName(value);
-			PARSER_CALLBACK(Parser::Sii::CONTEXT_UNIT_START, unitDeclaration->name, value, sourceValue, (unsigned long)(mCursor - &mData[0]));
+			PARSER_CALLBACK(Parser::Sii::Context::UNIT_START, unitDeclaration->name, value, sourceValue, (unsigned long)(mCursor - &mData[0]));
 			for (const auto& propertyDeclaration : unitDeclaration->properties) {
 				if (!readProperty(propertyDeclaration->type, propertyDeclaration->name, 0, false)) {
 					return false;
 				}
 			}
-			PARSER_CALLBACK(Parser::Sii::CONTEXT_UNIT_END, unitDeclaration->name, value, sourceValue, (unsigned long)(mCursor - &mData[0]));
+			PARSER_CALLBACK(Parser::Sii::Context::UNIT_END, unitDeclaration->name, value, sourceValue, (unsigned long)(mCursor - &mData[0]));
 		}
 		return true;
 	}
@@ -224,7 +224,7 @@ namespace Ets2::Parser::Sii {
 		case PropertyType::TOKEN:
 		case PropertyType::UNIT:
 			readValue(type, value, nullptr);
-			PARSER_CALLBACK(Parser::Sii::CONTEXT_ATTRIBUTE, *name, value, value, (unsigned long)(mCursor - &mData[0]));
+			PARSER_CALLBACK(Parser::Sii::Context::ATTRIBUTE, *name, value, value, (unsigned long)(mCursor - &mData[0]));
 			break;
 		case PropertyType::STRING:
 		case PropertyType::FLOAT:
@@ -236,7 +236,7 @@ namespace Ets2::Parser::Sii {
 			//if (*name == "my_truck_placement")
 			//	__debugbreak();
 			readValue(type, value, &sourceValue);
-			PARSER_CALLBACK(Parser::Sii::CONTEXT_ATTRIBUTE, *name, value, sourceValue, (unsigned long)(mCursor - &mData[0]));
+			PARSER_CALLBACK(Parser::Sii::Context::ATTRIBUTE, *name, value, sourceValue, (unsigned long)(mCursor - &mData[0]));
 			break;
 		case PropertyType::TOKEN_ARRAY:
 		case PropertyType::INT32_TRIPLE_ARRAY:
@@ -251,7 +251,7 @@ namespace Ets2::Parser::Sii {
 		{
 			uint32_t numItems = *(uint32_t *)getBytes(sizeof(uint32_t));
 			value = std::to_string(numItems);
-			PARSER_CALLBACK(Parser::Sii::CONTEXT_ATTRIBUTE, *name, value, value, (unsigned long)(mCursor - &mData[0]));
+			PARSER_CALLBACK(Parser::Sii::Context::ATTRIBUTE, *name, value, value, (unsigned long)(mCursor - &mData[0]));
 			for (uint32_t i = 0; i < numItems; ++i) {
 				readProperty((PropertyType)PropertyArrayTypesToBase[type], propertyName, true, i);
 			}

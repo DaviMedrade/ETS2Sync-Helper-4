@@ -6,7 +6,7 @@
 #include <memory>
 
 namespace Ets2 {
-	enum Game : unsigned int;
+	enum class Game : unsigned int;
 
 	class Object {
 	public:
@@ -15,12 +15,6 @@ namespace Ets2 {
 		// This is used to load and process the file passed as siiFileBasename to the constructor from the directory.
 		// Should be called from the constructor of a derived class.
 		void init(const std::wstring& directory);
-
-		enum ATTRIBUTE_PROCESS_RESULT {
-			PROCESS_RESULT_INCOMPLETE, // Keep processing
-			PROCESS_RESULT_COMPLETE, // All wanted attributes have been found; stop.
-			PROCESS_RESULT_INVALID // The attribute makes this object invalid.
-		};
 
 		// For ObjectList::sort
 		static bool compareForSort(const Object * left, const Object * right) {

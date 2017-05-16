@@ -9,14 +9,14 @@
 
 wxDEFINE_EVENT(EVT_JOB_SYNCER_UPDATE, wxCommandEvent);
 
-JobSyncer::JobSyncer(wxEvtHandler * eventHandler, bool clearJobs) {
+JobSyncer::JobSyncer(wxEvtHandler * eventHandler, SyncType syncType) {
 	mEventHandler = eventHandler;
-	mClearJobs = clearJobs;
+	mSyncType = syncType;
 	mInternetHandle = InternetOpen(APP_NAME + "/" + APP_VERSION, INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, NULL);
 	if (mInternetHandle == NULL) {
 		ShowLastWindowsError(L"InternetOpen");
 	}
-	mStatus.state = STATE_NOT_STARTED;
+	mStatus.state = State::NOT_STARTED;
 	mStatus.progress = PROGRESS_UNDEFINED;
 	mStatus.message = wxEmptyString;
 	mSave = nullptr;
@@ -30,7 +30,7 @@ JobSyncer::~JobSyncer() {
 
 void JobSyncer::start(const Ets2::Save * save, int dlcs) {
 	Status status = getStatus();
-	if (status.state >= STATE_STARTING && status.state < STATE_FINISHED) {
+	if (status.state >= State::STARTING && status.state < State::FINISHED) {
 		// Don't use SYNC_DEBUG_LOG because mSave is the save from the sync that's already running
 		DEBUG_LOG(L"Can't start sync: sync already in progress.");
 		// leave the status alone since another sync is running
@@ -40,19 +40,19 @@ void JobSyncer::start(const Ets2::Save * save, int dlcs) {
 	mDlcs = dlcs;
 	if (mSave == nullptr) {
 		SYNC_DEBUG_LOG(L"Can't start sync: save is null.");
-		setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, L"No save selected.");
+		setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"No save selected.");
 		return;
 	}
 	SYNC_DEBUG_LOG(L"Starting sync.");
-	setStatus(SET_ALL, STATE_STARTING, PROGRESS_UNDEFINED, L"Starting sync…");
+	setStatus(SET_ALL, State::STARTING, PROGRESS_UNDEFINED, L"Starting sync…");
 	if (CreateThread(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR) {
 		SYNC_DEBUG_LOG(L"Could not create sync thread.");
-		setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, L"The sync thread could not be created.");
+		setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"The sync thread could not be created.");
 		return;
 	}
 	if (GetThread()->Run() != wxTHREAD_NO_ERROR) {
 		SYNC_DEBUG_LOG(L"Could not run sync thread.");
-		setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, L"The sync thread could not be started.");
+		setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"The sync thread could not be started.");
 		return;
 	}
 }
@@ -72,7 +72,7 @@ void JobSyncer::cancel() {
 	mCancel = true;
 }
 
-void JobSyncer::setStatus(int flags, STATE state, int progress, wxString message) {
+void JobSyncer::setStatus(int flags, State state, int progress, wxString message) {
 	wxCriticalSectionLocker lock(mStatusLock);
 	if (flags & SET_STATE) {
 		mStatus.state = state;
@@ -95,7 +95,7 @@ wxThread::ExitCode JobSyncer::Entry() {
 	}
 
 	Ets2::Save::JobList jobs;
-	if (!mClearJobs) {
+	if (mSyncType == SyncType::SYNC) {
 		if (!getJobs(jobs)) {
 			{
 				wxCriticalSectionLocker locker(mCancelLock);
@@ -109,25 +109,25 @@ wxThread::ExitCode JobSyncer::Entry() {
 		}
 	}
 
-	setStatus(SET_STATE | SET_MESSAGE, STATE_INSERTING_JOBS, 0, L"");
+	setStatus(SET_STATE | SET_MESSAGE, State::INSERTING_JOBS, 0, L"");
 
 	bool result = mSave->replaceJobList(jobs, [&](int progress) -> bool {
 		{
 			wxCriticalSectionLocker locker(mCancelLock);
 			if (mCancel) {
-				setStatus(SET_ALL, STATE_CANCELED, PROGRESS_UNDEFINED, L"Sync canceled.");
+				setStatus(SET_ALL, State::CANCELED, PROGRESS_UNDEFINED, L"Sync canceled.");
 				return false;
 			}
 		}
-		setStatus(SET_ALL, STATE_INSERTING_JOBS, progress, wxString::Format(L"%d%% processed.", progress));
+		setStatus(SET_ALL, State::INSERTING_JOBS, progress, wxString::Format(L"%d%% processed.", progress));
 		//wxSafeYield();
 		return true;
 	});
-	if (getStatus().state == STATE_INSERTING_JOBS) {
+	if (getStatus().state == State::INSERTING_JOBS) {
 		if (result) {
-			setStatus(SET_ALL, STATE_FINISHED, PROGRESS_UNDEFINED, L"Sync complete.");
+			setStatus(SET_ALL, State::FINISHED, PROGRESS_UNDEFINED, L"Sync complete.");
 		} else {
-			setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, L"Error inserting jobs into the save.");
+			setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"Error inserting jobs into the save.");
 		}
 	}
 
@@ -136,12 +136,12 @@ wxThread::ExitCode JobSyncer::Entry() {
 }
 
 bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
-	setStatus(SET_ALL, STATE_DOWNLOADING, PROGRESS_UNDEFINED, L"Connecting to the server…");
+	setStatus(SET_ALL, State::DOWNLOADING, PROGRESS_UNDEFINED, L"Connecting to the server…");
 
 	std::wstring syncUrl = APP_URL_SYNC;
 	std::wstring gameParam = L"";
 	std::wstring dlcParam = L"";
-	if (mSave->getGame() == Ets2::Game::GAME_ATS) {
+	if (mSave->getGame() == Ets2::Game::ATS) {
 		gameParam = L"ats";
 	} else {
 		gameParam = L"ets2";
@@ -174,7 +174,7 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 		INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE | INTERNET_FLAG_NO_COOKIES, (DWORD_PTR)this);
 	if (urlHandle == NULL) {
 		ShowLastWindowsError(L"InternetOpenUrl");
-		setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, L"Could not download the job list.");
+		setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"Could not download the job list.");
 		return false;
 	}
 
@@ -185,7 +185,7 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 		if (!HttpQueryInfo(urlHandle, HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER, &httpStatus, &httpStatusSize, NULL)) {
 			SYNC_DEBUG_LOG(L"Error getting the HTTP status.");
 			ShowLastWindowsError(L"HttpQueryInfo (1)");
-			setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, L"Could not download the job list.");
+			setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"Could not download the job list.");
 			break;
 		}
 		if (httpStatus != 200) {
@@ -197,16 +197,16 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 				statusMessage.resize(httpStatusMessageSize + 1);
 				if (!HttpQueryInfo(urlHandle, HTTP_QUERY_STATUS_TEXT, statusMessage.data(), &httpStatusMessageSize, NULL)) {
 					ShowLastWindowsError(L"HttpQueryInfo (2)");
-					setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED,
+					setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED,
 						wxString::Format(L"Could not download the job list. HTTP %d <error getting status message>", httpStatus));
 				} else {
 					statusMessage[httpStatusMessageSize] = 0;
-					setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED,
+					setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED,
 						wxString::Format(L"Could not download the job list. HTTP %d %s", httpStatus, statusMessage.data()));
 				}
 			} else {
 				ShowLastWindowsError(L"HttpQueryInfo (3)");
-				setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED,
+				setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED,
 					wxString::Format(L"Could not download the job list. HTTP %d <error getting status message>", httpStatus));
 			}
 			break;
@@ -233,8 +233,8 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 			{
 				wxCriticalSectionLocker locker(mCancelLock);
 				if (mCancel) {
-					SYNC_DEBUG_LOG(L"Sync cancelled.");
-					setStatus(SET_ALL, STATE_CANCELED, PROGRESS_UNDEFINED, L"Sync canceled.");
+					SYNC_DEBUG_LOG(L"Sync canceled.");
+					setStatus(SET_ALL, State::CANCELED, PROGRESS_UNDEFINED, L"Sync canceled.");
 					break;
 				}
 			}
@@ -245,7 +245,7 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 			}
 			if (!InternetReadFile(urlHandle, &data[position], DOWNLOAD_CHUNK, &offset)) {
 				ShowLastWindowsError(L"InternetReadFile");
-				setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, L"Could not download the job list.");
+				setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"Could not download the job list.");
 				break;
 			}
 			if (offset == 0) {
@@ -267,7 +267,7 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 			} else {
 				message = wxString::Format(L"Downloaded %d kB%s", position / 1024, kbps == 0 ? L"" : wxString::Format(L" — %lld kB/s.", kbps));
 			}
-			setStatus(SET_PROGRESS | SET_MESSAGE, STATE_DOWNLOADING, progress, message);
+			setStatus(SET_PROGRESS | SET_MESSAGE, State::DOWNLOADING, progress, message);
 			//GetThread()->Sleep(500);
 		}
 		SYNC_DEBUG_LOG(L"Download complete. %d byte(s) in %lld ms.", data.size(), (wxDateTime::UNow() - downloadStartTime).GetMilliseconds());
@@ -275,13 +275,13 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 
 	if (!InternetCloseHandle(urlHandle)) {
 		ShowLastWindowsError(L"InternetCloseHandle");
-		setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, L"Could not download the job list.");
+		setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"Could not download the job list.");
 		return false;
 	}
 
 	{
 		Status status = getStatus();
-		if (status.state != STATE_DOWNLOADING) {
+		if (status.state != State::DOWNLOADING) {
 			return false;
 		}
 	}
@@ -291,7 +291,7 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 	wxStopWatch sws;
 	json.ParseInsitu(&data[0]);
 	if (json.HasParseError()) {
-		setStatus(SET_ALL, STATE_ERROR, PROGRESS_UNDEFINED, wxString::Format(L"Job list error at %u: %s", json.GetErrorOffset(), GetParseError_En(json.GetParseError())).ToStdWstring());
+		setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, wxString::Format(L"Job list error at %u: %s", json.GetErrorOffset(), GetParseError_En(json.GetParseError())).ToStdWstring());
 		return false;
 	}
 		

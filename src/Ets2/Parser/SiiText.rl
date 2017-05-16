@@ -19,12 +19,12 @@
 
 	action unitStart {
 		attrSourceValue.clear();
-		PARSER_CALLBACK(CONTEXT_UNIT_START, unitClass, unitInstance, attrSourceValue, p - start);
+		PARSER_CALLBACK(Context::UNIT_START, unitClass, unitInstance, attrSourceValue, p - start);
 	}
 
 	action unitEnd {
 		attrSourceValue.clear();
-		PARSER_CALLBACK(CONTEXT_UNIT_END, unitClass, unitInstance, attrSourceValue, p - start);
+		PARSER_CALLBACK(Context::UNIT_END, unitClass, unitInstance, attrSourceValue, p - start);
 	}
 
 	action attrNameStart {
@@ -43,7 +43,7 @@
 
 	action attrValueEnd {
 		attrSourceValue.assign(attrSourceValueStart, p - attrSourceValueStart);
-		PARSER_CALLBACK(CONTEXT_ATTRIBUTE, attrName, attrRawValue, attrSourceValue, p - start);
+		PARSER_CALLBACK(Context::ATTRIBUTE, attrName, attrRawValue, attrSourceValue, p - start);
 		//wxLogDebug("Attr Value: '%s' (state %d)", attrRawValue, cs);
 	}
 

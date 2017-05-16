@@ -1,14 +1,14 @@
 #include "precomp.hpp"
 #include "SyncDialog.hpp"
 
-SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, int dlcs, bool clearJobs)
+SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, int dlcs, JobSyncer::SyncType syncType)
 	: wxDialog(parent, wxID_ANY, L"Job Sync") {
 	mParent = parent;
 	mSave = save;
 	mDlcs = dlcs;
-	mClearJobs = clearJobs;
+	mSyncType = syncType;
 
-	mJobSyncer = new JobSyncer(this, mClearJobs);
+	mJobSyncer = new JobSyncer(this, syncType);
 	Bind(EVT_JOB_SYNCER_UPDATE, [this](wxCommandEvent&) { onJobSyncerUpdate(); });
 
 	wxPoint border = wxDLG_UNIT(this, wxPoint(7, 7));
@@ -23,7 +23,7 @@ SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, int dlcs, boo
 	sizer->AddSpacer(border.y);
 
 	mStatus = new StatusText(this, wxID_ANY);
-	mStatus->SetLabel(L"Starting…", StatusText::TYPE_STATUS);
+	mStatus->SetLabel(L"Starting…", StatusText::Type::STATUS);
 	mStatus->SetFont(mStatus->GetFont().MakeLarger());
 	sizer->Add(mStatus, wxSizerFlags().Expand());
 
@@ -59,9 +59,9 @@ SyncDialog::~SyncDialog() {
 void SyncDialog::onClose() {
 	JobSyncer::Status status = mJobSyncer->getStatus();
 	switch (status.state) {
-	case JobSyncer::STATE_STARTING:
-	case JobSyncer::STATE_DOWNLOADING:
-	case JobSyncer::STATE_INSERTING_JOBS:
+	case JobSyncer::State::STARTING:
+	case JobSyncer::State::DOWNLOADING:
+	case JobSyncer::State::INSERTING_JOBS:
 		mJobSyncer->cancel();
 		break;
 	default:
@@ -78,42 +78,42 @@ void SyncDialog::onJobSyncerUpdate() {
 	StatusText::Type statusType = mStatus->getType();
 
 	switch (status.state) {
-	case JobSyncer::STATE_STARTING:
-	case JobSyncer::STATE_DOWNLOADING:
-		statusType = StatusText::TYPE_STATUS;
+	case JobSyncer::State::STARTING:
+	case JobSyncer::State::DOWNLOADING:
+		statusType = StatusText::Type::STATUS;
 		statusMessage = L"Downloading job list…";
 		subStatusMessage = status.message;
 		progress = status.progress;
 		break;
-	case JobSyncer::STATE_INSERTING_JOBS:
-		statusType = StatusText::TYPE_STATUS;
-		statusMessage = mClearJobs ? L"Removing all jobs from the save…" : L"Inserting jobs into the save…";
+	case JobSyncer::State::INSERTING_JOBS:
+		statusType = StatusText::Type::STATUS;
+		statusMessage = (mSyncType == JobSyncer::SyncType::SYNC) ? L"Inserting jobs into the save…" : L"Removing all jobs from the save…";
 		subStatusMessage = status.message;
 		progress = status.progress;
 		break;
-	case JobSyncer::STATE_FINISHED:
-		statusType = StatusText::TYPE_SUCCESS;
-		statusMessage = mClearJobs ? L"Jobs cleared." : L"Sync complete.";
-		subStatusMessage = wxString::Format(L"In the game, load the save named “%s”.\n%s", mSave->getName(), mClearJobs ? L"Then, call Assistance (F7) to generate new jobs." : L"").ToStdWstring();
+	case JobSyncer::State::FINISHED:
+		statusType = StatusText::Type::SUCCESS;
+		statusMessage = (mSyncType == JobSyncer::SyncType::SYNC) ? L"Sync complete." : L"Jobs cleared.";
+		subStatusMessage = wxString::Format(L"In the game, load the save named “%s”.\n%s", mSave->getName(), (mSyncType == JobSyncer::SyncType::CLEAR) ? L"Then, call Assistance (F7) to generate new jobs." : L"").ToStdWstring();
 		mCloseButton->SetLabel("Close");
 		progress = 100;
 		break;
-	case JobSyncer::STATE_CANCELED:
-		statusType = StatusText::TYPE_ERROR;
+	case JobSyncer::State::CANCELED:
+		statusType = StatusText::Type::FAILURE;
 		statusMessage = L"Sync canceled.";
 		subStatusMessage = wxEmptyString;
 		mCloseButton->SetLabel("Close");
 		progress = 0;
 		break;
-	case JobSyncer::STATE_ERROR:
-		statusType = StatusText::TYPE_ERROR;
+	case JobSyncer::State::FAILED:
+		statusType = StatusText::Type::FAILURE;
 		statusMessage = L"Sync error.";
 		subStatusMessage = status.message;
 		mCloseButton->SetLabel("Close");
 		progress = 0;
 		break;
 	default:
-		statusType = StatusText::TYPE_ERROR;
+		statusType = StatusText::Type::FAILURE;
 		statusMessage = L"Sync error.";
 		subStatusMessage = wxString::Format(L"Unknown state: %d", status.state).ToStdWstring();
 		mCloseButton->SetLabel("Close");

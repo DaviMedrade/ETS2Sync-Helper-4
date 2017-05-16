@@ -9,21 +9,25 @@ wxDECLARE_EVENT(EVT_JOB_SYNCER_UPDATE, wxCommandEvent);
 
 class JobSyncer : public wxEvtHandler, public wxThreadHelper {
 public:
-	JobSyncer(wxEvtHandler * eventHandler, bool clearJobs);
+	enum class SyncType {
+		SYNC,
+		CLEAR
+	};
+	JobSyncer(wxEvtHandler * eventHandler, SyncType syncType);
 	~JobSyncer();
 
-	enum STATE {
-		STATE_NOT_STARTED,
-		STATE_STARTING,
-		STATE_DOWNLOADING,
-		STATE_INSERTING_JOBS,
-		STATE_FINISHED,
-		STATE_CANCELED,
-		STATE_ERROR
+	enum class State {
+		NOT_STARTED,
+		STARTING,
+		DOWNLOADING,
+		INSERTING_JOBS,
+		FINISHED,
+		CANCELED,
+		FAILED
 	};
 
 	struct Status {
-		STATE state;
+		State state;
 		int progress;
 		wxString message;
 	};
@@ -43,7 +47,7 @@ private:
 	static const int DOWNLOAD_CHUNK = 16384;
 
 	wxEvtHandler * mEventHandler;
-	bool mClearJobs;
+	SyncType mSyncType;
 	HINTERNET mInternetHandle;
 	Status mStatus;
 	wxCriticalSection mStatusLock;
@@ -52,7 +56,7 @@ private:
 	const Ets2::Save * mSave;
 	int mDlcs;
 
-	void setStatus(int flags, STATE state, int progress, wxString message);
+	void setStatus(int flags, State state, int progress, wxString message);
 	wxThread::ExitCode Entry();
 	bool getJobs(Ets2::Save::JobList& jobs);
 };

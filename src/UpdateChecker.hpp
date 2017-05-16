@@ -8,19 +8,19 @@ wxDECLARE_EVENT(EVT_UPDATE_CHECKER, wxCommandEvent);
 class UpdateChecker : public wxEvtHandler, public wxThreadHelper {
 public:
 	// Update check possible states
-	enum State {
-		STATE_UNKNOWN,
-		STATE_RUNNING,
-		STATE_FINISHED,
-		STATE_CANCELED,
-		STATE_ERROR
+	enum class State {
+		UNKNOWN,
+		RUNNING,
+		FINISHED,
+		CANCELED,
+		FAILED
 	};
 	// Update check possible results
-	enum Result {
-		RESULT_UNKNOWN,
-		RESULT_UP_TO_DATE,
-		RESULT_NEW_BUGFIX,
-		RESULT_NEW_VERSION
+	enum class Result {
+		UNKNOWN,
+		UP_TO_DATE,
+		NEW_BUGFIX,
+		NEW_VERSION
 	};
 	struct Status {
 		bool cancel;

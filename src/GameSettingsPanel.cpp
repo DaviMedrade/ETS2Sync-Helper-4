@@ -41,8 +41,8 @@ GameSettingsPanel::GameSettingsPanel(wxWindow * parent, wxWindowID id)
 	gameSizer->Add(mGameEts2);
 	gameSizer->Add(mGameAts);
 
-	mGameEts2->Bind(wxEVT_RADIOBUTTON, [this](wxCommandEvent&) { setGame(Ets2::Game::GAME_ETS2); });
-	mGameAts->Bind(wxEVT_RADIOBUTTON, [this](wxCommandEvent&) { setGame(Ets2::Game::GAME_ATS); });
+	mGameEts2->Bind(wxEVT_RADIOBUTTON, [this](wxCommandEvent&) { setGame(Ets2::Game::ETS2); });
+	mGameAts->Bind(wxEVT_RADIOBUTTON, [this](wxCommandEvent&) { setGame(Ets2::Game::ATS); });
 
 	// Settings Folder
 	mainSizer->Add(new wxStaticText(this, wxID_ANY, L"Settings Folder:", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT), wxSizerFlags().CenterVertical().Expand());
@@ -69,9 +69,9 @@ GameSettingsPanel::GameSettingsPanel(wxWindow * parent, wxWindowID id)
 	mSaveFormatText = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_MIDDLE);
 	mSaveFormatSeparator = new wxStaticText(this, wxID_ANY, L" - ");
 	//mFixSaveFormatButton = new wxHyperlinkCtrl(this, wxID_ANY, L"Set to “Binary”", wxEmptyString);
-	//mFixSaveFormatButton->Bind(wxEVT_HYPERLINK, [this](wxCommandEvent&) { getEts2Info()->changeSaveFormat(Ets2::Info::SAVE_FORMAT_BINARY); });
+	//mFixSaveFormatButton->Bind(wxEVT_HYPERLINK, [this](wxCommandEvent&) { getEts2Info()->changeSaveFormat(Ets2::Info::SaveFormat::BINARY); });
 	mFixSaveFormatButton = new wxHyperlinkCtrl(this, wxID_ANY, L"Set to “Text”", wxEmptyString);
-	mFixSaveFormatButton->Bind(wxEVT_HYPERLINK, [this](wxCommandEvent&) { getEts2Info()->changeSaveFormat(Ets2::Info::SAVE_FORMAT_TEXT); });
+	mFixSaveFormatButton->Bind(wxEVT_HYPERLINK, [this](wxCommandEvent&) { getEts2Info()->changeSaveFormat(Ets2::Info::SaveFormat::TEXT); });
 
 	mSaveFormatSizer->Add(mSaveFormatText, wxSizerFlags().CenterVertical());
 	mSaveFormatSizer->Add(mSaveFormatSeparator, wxSizerFlags().CenterVertical());
@@ -82,7 +82,7 @@ GameSettingsPanel::GameSettingsPanel(wxWindow * parent, wxWindowID id)
 	mStatusText = new StatusText(this, wxID_ANY);
 	contentSizer->Add(mStatusText);
 
-	setGame(Ets2::Game::GAME_ETS2, false);
+	setGame(Ets2::Game::ETS2, false);
 }
 
 GameSettingsPanel::~GameSettingsPanel() {
@@ -95,7 +95,7 @@ Ets2::Game GameSettingsPanel::getGame() {
 
 void GameSettingsPanel::setGame(Ets2::Game game, bool sendEvent) {
 	mGame = game;
-	if (game == Ets2::Game::GAME_ATS) {
+	if (game == Ets2::Game::ATS) {
 		mGameAts->SetValue(true);
 		mGameEts2->SetValue(false);
 	} else {
@@ -151,7 +151,7 @@ void GameSettingsPanel::updateFromEts2Info() {
 	mConfigDirOptionOpen->Enable(dir.Exists());
 	mConfigDirOptionOpenFile->Enable(ets2Info->isValid());
 	mConfigDirOptionDefault->Enable(!isDefaultDir);
-	MENU_ID id = MENU_ID_CONFIG_DIR_OPEN;
+	MenuId id = MENU_ID_CONFIG_DIR_OPEN;
 	if (!ets2Info->isValid()) {
 		id = isDefaultDir ? MENU_ID_CONFIG_DIR_CHANGE : MENU_ID_CONFIG_DIR_DEFAULT;
 	}
@@ -161,8 +161,8 @@ void GameSettingsPanel::updateFromEts2Info() {
 		setConfigDirText(ets2Info->getDirectory());
 	}
 	if (ets2Info->isValid()) {
-		//if (ets2Info->getSaveFormat() == Ets2::Info::SAVE_FORMAT_BINARY) {
-		if (ets2Info->getSaveFormat() == Ets2::Info::SAVE_FORMAT_TEXT) {
+		//if (ets2Info->getSaveFormat() == Ets2::Info::SaveFormat::BINARY) {
+		if (ets2Info->getSaveFormat() == Ets2::Info::SaveFormat::TEXT) {
 			mSaveFormatSeparator->Hide();
 			mFixSaveFormatButton->Hide();
 		} else {
@@ -171,27 +171,27 @@ void GameSettingsPanel::updateFromEts2Info() {
 		}
 		mSaveFormatText->SetToolTip(L"");
 		switch (ets2Info->getSaveFormat()) {
-		case Ets2::Info::SAVE_FORMAT_BINARY:
+		case Ets2::Info::SaveFormat::BINARY:
 			mSaveFormatText->SetLabel(L"Binary");
-			//mStatusText->SetLabel(L"Settings OK", StatusText::TYPE_SUCCESS);
-			mStatusText->SetLabel("The recommended save format is “Text”.", StatusText::TYPE_WARNING);
+			//mStatusText->SetLabel(L"Settings OK", StatusText::Type::SUCCESS);
+			mStatusText->SetLabel("The recommended save format is “Text”.", StatusText::Type::WARNING);
 			break;
-		case Ets2::Info::SAVE_FORMAT_TEXT:
+		case Ets2::Info::SaveFormat::TEXT:
 			mSaveFormatText->SetLabel(L"Text");
-			//mStatusText->SetLabel("The recommended save format is “Binary”.", StatusText::TYPE_WARNING);
-			mStatusText->SetLabel(L"Settings OK", StatusText::TYPE_SUCCESS);
+			//mStatusText->SetLabel("The recommended save format is “Binary”.", StatusText::Type::WARNING);
+			mStatusText->SetLabel(L"Settings OK", StatusText::Type::SUCCESS);
 			break;
-		case Ets2::Info::SAVE_FORMAT_BOTH:
+		case Ets2::Info::SaveFormat::BOTH:
 			mSaveFormatText->SetLabel(L"Hybrid");
-			//mStatusText->SetLabel("The recommended save format is “Binary”.", StatusText::TYPE_WARNING);
-			mStatusText->SetLabel("The recommended save format is “Text”.", StatusText::TYPE_WARNING);
+			//mStatusText->SetLabel("The recommended save format is “Binary”.", StatusText::Type::WARNING);
+			mStatusText->SetLabel("The recommended save format is “Text”.", StatusText::Type::WARNING);
 			break;
-		case Ets2::Info::SAVE_FORMAT_NOT_FOUND:
+		case Ets2::Info::SaveFormat::NOT_FOUND:
 			mSaveFormatText->SetLabel(L"Not found");
-			mStatusText->SetLabel("The save format was not found in the settings file.", StatusText::TYPE_ERROR);
+			mStatusText->SetLabel("The save format was not found in the settings file.", StatusText::Type::FAILURE);
 			break;
 		default:
-			mStatusText->SetLabel("Unknown save format.", StatusText::TYPE_ERROR);
+			mStatusText->SetLabel("Unknown save format.", StatusText::Type::FAILURE);
 			mSaveFormatText->SetLabel(wxString::Format(L"Unknown (%s)", ets2Info->getRawSaveFormat()));
 			mSaveFormatText->SetToolTip(ets2Info->getRawSaveFormat());
 		}
@@ -201,7 +201,7 @@ void GameSettingsPanel::updateFromEts2Info() {
 		mSaveFormatText->SetLabel(L"Not found");
 		mSaveFormatSeparator->Hide();
 		mFixSaveFormatButton->Hide();
-		mStatusText->SetLabel(L"Game settings were not found in the directory above.", StatusText::TYPE_ERROR);
+		mStatusText->SetLabel(L"Game settings were not found in the directory above.", StatusText::Type::FAILURE);
 		Layout();
 	}
 }

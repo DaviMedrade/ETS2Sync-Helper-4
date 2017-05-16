@@ -5,8 +5,8 @@ StatusText::StatusText(wxWindow * wwParent, wxWindowID id)
 	: wxStaticText(wwParent, id, wxEmptyString) {
 
 	// set font and color in case the default is different
-	mType = TYPE_SUCCESS;
-	SetLabel(wxEmptyString, TYPE_STATUS); 
+	mType = Type::SUCCESS;
+	SetLabel(wxEmptyString, Type::STATUS); 
 }
 
 StatusText::Type StatusText::getType() const {
@@ -17,22 +17,22 @@ void StatusText::SetLabel(const wxString& wsLabel, Type newType) {
 	if (newType != mType) {
 		mType = newType;
 		wxFont font = GetFont().GetBaseFont();
-		if (mType != TYPE_STATUS)
+		if (mType != Type::STATUS)
 			font = font.MakeBold();
 		SetFont(font);
 
 		wxColor color;
 		switch (mType) {
-		case TYPE_STATUS:
+		case Type::STATUS:
 			color = wxColor(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 			break;
-		case TYPE_SUCCESS:
+		case Type::SUCCESS:
 			color = wxColor(0x008800);
 			break;
-		case TYPE_WARNING:
+		case Type::WARNING:
 			color = wxColor(0x22aadd);
 			break;
-		case TYPE_ERROR:
+		case Type::FAILURE:
 			color = wxColor(0x0000ff);
 			break;
 		}
