@@ -20,7 +20,9 @@ Se o seu jogo não estiver configurado com `g_save_format 2`, o programa permiti
 Se você tiver o Console de Desenvolvimento ativado no jogo, você pode usar o comando `g_save_format 2` antes de salvar o jogo para sincronizar, e então você pode usar o comando `g_save_format 0` depois de sincronizar. Dessa forma o jogo não vai dar lag quando criar autosaves, o que pode ocorrer se você dirigir com `g_save_format` configurado para Texto (2). Se você usar o Console de Desenvolvimento para configurar o formato do save, você pode ignorar a mensagem em amareno no programa dizendo que o formato do save recomendado é Texto.
 
 ## Clear Jobs
-Uma funcionalidade adicionada nesta versão é a possibilidade de esvaziar o Mercado de Fretes. Dessa forma, se você não quer mais jogar com a lista sincronizada e quiser que o jogo gere uma lista de cargas nova para você jogar sozinho, você só precisa fazer o mesmo processo que o de sincronização, mas clicando em “Clear Jobs” em vez de “Sync Jobs”. Ao carregar o save, o Mercado de Fretes vai estar vazio. Aí basta pular para a oficina com o F7 e o jogo gerará novas cargas para você.
+Uma funcionalidade adicionada na versão 5.0.0 é a possibilidade de esvaziar o Mercado de Fretes. Dessa forma, se você não quer mais jogar com a lista sincronizada e quiser que o jogo gere uma lista de cargas nova para você jogar sozinho, você só precisa fazer o mesmo processo que o de sincronização, mas clicando em “Clear Jobs” em vez de “Sync Jobs”. Ao carregar o save, o Mercado de Fretes vai estar vazio. Aí basta pular para a oficina com o F7 e o jogo gerará novas cargas para você.
+
+A versão 5.1.0 adicionou a opção “Economy Reset”. Se você selecionar um save e clicar em “Economy Reset”, ao carregar o save o jogo mostrará uma mensagem dizendo que uma mudança foi detectada, o que vai gerar novas cargas imediatamente (i.e. sem precisar pular para a oficina ou usar Viagens Rápidas para repopular o Mercado de Fretes). Uma desvantagem é que você será movido para a sua garagem principal.
 
 ## Bugs/Problemas
 Se você encontrar um problema no programa, informe no link abaixo:
