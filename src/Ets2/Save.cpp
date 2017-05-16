@@ -171,7 +171,7 @@ namespace Ets2 {
 						newSaveData.append(currentJob->cargo);
 						newLineHasValue = true;
 					} else if (name == "company_truck") {
-						bool needsQuotes = (currentJob->companyTruck.empty() || currentJob->companyTruck.find_first_of('/') == std::string::npos);
+						bool needsQuotes = (currentJob->companyTruck.empty() || currentJob->companyTruck.find_first_of('/') != std::string::npos);
 						if (needsQuotes) {
 							newSaveData.append("\"");
 						}
