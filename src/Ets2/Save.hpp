@@ -18,7 +18,8 @@ namespace Ets2 {
 		static const int DLC_GOINGEAST = 1 << 1;
 		static const int DLC_HIGHPOWERCARGO = 1 << 2;
 		static const int DLC_FRANCE = 1 << 3;
-		static const int DLC_ALL = DLC_SCANDINAVIA | DLC_GOINGEAST | DLC_HIGHPOWERCARGO | DLC_FRANCE;
+		static const int DLC_HEAVYCARGO = 1 << 4;
+		static const int DLC_ALL = DLC_SCANDINAVIA | DLC_GOINGEAST | DLC_HIGHPOWERCARGO | DLC_FRANCE | DLC_HEAVYCARGO;
 
 		struct Job {
 			std::string cargo;
@@ -48,6 +49,7 @@ namespace Ets2 {
 		static const std::wstring DEPEND_GOINGEAST;
 		static const std::wstring DEPEND_HIGHPOWERCARGO;
 		static const std::wstring DEPEND_FRANCE;
+		static const std::wstring DEPEND_HEAVYCARGO;
 		static const std::string ECONOMY_UNIT;
 		static const std::string GAME_TIME_ATTRIBUTE;
 		static const std::string COMPANY_UNIT;

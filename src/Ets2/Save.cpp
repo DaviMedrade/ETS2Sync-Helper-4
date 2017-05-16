@@ -14,6 +14,7 @@ namespace Ets2 {
 	const std::wstring Save::DEPEND_GOINGEAST = L"dlc|eut2_east|";
 	const std::wstring Save::DEPEND_HIGHPOWERCARGO = L"rdlc|eut2_trailers|";
 	const std::wstring Save::DEPEND_FRANCE = L"dlc|eut2_fr|";
+	const std::wstring Save::DEPEND_HEAVYCARGO = L"rdlc|eut2_heavy_cargo|";
 	const std::string Save::ECONOMY_UNIT = "economy";
 	const std::string Save::GAME_TIME_ATTRIBUTE = "game_time";
 	const std::string Save::COMPANY_UNIT = "company";
@@ -24,6 +25,7 @@ namespace Ets2 {
 		: Object(SII_BASENAME) {
 		//wxStopWatch initTime;
 		mDlcs = 0;
+		//DEBUG_LOG(L"%s: Initializing", directory);
 		init(directory);
 		//DEBUG_LOG(L"%s: Initialized in %lld µs", mName, initTime.TimeInMicro());
 	};
@@ -40,6 +42,7 @@ namespace Ets2 {
 		if (context != Parser::Sii::Context::ATTRIBUTE) {
 			return;
 		}
+		//DEBUG_LOG(L"%s: %s", attribute, value);
 		if (mName.empty() && attribute == NAME_ATTRIBUTE) {
 			Utf8ToUtf16(value.data(), value.length(), mName);
 		} else if (mSaveTime == 0 && attribute == SAVE_TIME_ATTRIBUTE) {
@@ -51,6 +54,7 @@ namespace Ets2 {
 		} else if (attribute.find(DEPEND_ATTRIBUTE) != std::string::npos) {
 			std::wstring wideValue;
 			Utf8ToUtf16(value.data(), value.length(), wideValue);
+			//DEBUG_LOG(L"Dependency: %ls", wideValue);
 			if (wideValue.find(DEPEND_SCANDINAVIA) == 0) {
 				mDlcs |= DLC_SCANDINAVIA;
 			} else if (wideValue.find(DEPEND_GOINGEAST) == 0) {
@@ -59,6 +63,8 @@ namespace Ets2 {
 				mDlcs |= DLC_HIGHPOWERCARGO;
 			} else if (wideValue.find(DEPEND_FRANCE) == 0) {
 				mDlcs |= DLC_FRANCE;
+			} else if (wideValue.find(DEPEND_HEAVYCARGO) == 0) {
+				mDlcs |= DLC_HEAVYCARGO;
 			}
 		}
 	}

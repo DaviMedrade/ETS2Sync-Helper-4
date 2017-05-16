@@ -178,6 +178,12 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 			}
 			dlcParam += L"fr";
 		}
+		if (mDlcs & Ets2::Save::DLC_HEAVYCARGO) {
+			if (!dlcParam.empty()) {
+				dlcParam += L",";
+			}
+			dlcParam += L"heavy";
+		}
 	}
 	syncUrl += L"&game=" + gameParam + L"&dlcs=" + dlcParam;
 
