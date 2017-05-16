@@ -28,6 +28,7 @@ namespace Ets2 {
 			int distance;
 			int ferryTime;
 			int ferryPrice;
+			std::string companyTruck;
 		};
 
 		typedef std::map<std::string, std::vector<Job>> JobList;

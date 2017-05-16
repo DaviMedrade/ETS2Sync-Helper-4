@@ -84,6 +84,7 @@ namespace Ets2 {
 		std::string currentCompany;
 		Job blankJob;
 		blankJob.cargo = "null";
+		blankJob.companyTruck = "";
 		blankJob.variant = -1;
 		blankJob.target = "";
 		blankJob.urgency = -1;
@@ -164,6 +165,16 @@ namespace Ets2 {
 				} else if (inJob) {
 					if (name == "cargo") {
 						newSaveData.append(currentJob->cargo);
+						newLineHasValue = true;
+					} else if (name == "company_truck") {
+						bool needsQuotes = (currentJob->companyTruck.empty() || currentJob->companyTruck.find_first_of('/') == std::string::npos);
+						if (needsQuotes) {
+							newSaveData.append("\"");
+						}
+						newSaveData.append(currentJob->companyTruck);
+						if (needsQuotes) {
+							newSaveData.append("\"");
+						}
 						newLineHasValue = true;
 					} else if (name == "variant") {
 						newSaveData.append(currentJob->variant == -1 ? "nil" : std::to_string(currentJob->variant));

@@ -307,6 +307,8 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 				propValue.assign(propIterator->value.GetString(), propIterator->value.GetStringLength());
 				if (propName == "cargo") {
 					job.cargo = propValue;
+				} else if (propName == "company_truck") {
+					job.companyTruck = propValue;
 				} else if (propName == "target_company") {
 					jobTarget.insert(0, propValue);
 				} else if (propName == "target_city") {
