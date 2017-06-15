@@ -155,30 +155,33 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 	std::wstring dlcParam = L"";
 	if (mSave->getGame() == Ets2::Game::ATS) {
 		gameParam = L"ats";
+		if (mDlcs & Ets2::Save::DLC_ATS_HEAVYCARGO) {
+			dlcParam += L"heavy";
+		}
 	} else {
 		gameParam = L"ets2";
-		if (mDlcs & Ets2::Save::DLC_SCANDINAVIA) {
+		if (mDlcs & Ets2::Save::DLC_ETS2_SCANDINAVIA) {
 			dlcParam += L"north";
 		}
-		if (mDlcs & Ets2::Save::DLC_GOINGEAST) {
+		if (mDlcs & Ets2::Save::DLC_ETS2_GOINGEAST) {
 			if (!dlcParam.empty()) {
 				dlcParam += L",";
 			}
 			dlcParam += L"east";
 		}
-		if (mDlcs & Ets2::Save::DLC_HIGHPOWERCARGO) {
+		if (mDlcs & Ets2::Save::DLC_ETS2_HIGHPOWERCARGO) {
 			if (!dlcParam.empty()) {
 				dlcParam += L",";
 			}
 			dlcParam += L"hpower";
 		}
-		if (mDlcs & Ets2::Save::DLC_FRANCE) {
+		if (mDlcs & Ets2::Save::DLC_ETS2_FRANCE) {
 			if (!dlcParam.empty()) {
 				dlcParam += L",";
 			}
 			dlcParam += L"fr";
 		}
-		if (mDlcs & Ets2::Save::DLC_HEAVYCARGO) {
+		if (mDlcs & Ets2::Save::DLC_ETS2_HEAVYCARGO) {
 			if (!dlcParam.empty()) {
 				dlcParam += L",";
 			}

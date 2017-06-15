@@ -31,9 +31,8 @@ namespace Ets2 {
 		bool fileFound = savesDir.GetFirst(&saveDir, L"*", wxDIR_DIRS);
 		while (fileFound) {
 			if (saveDir.find("autosave") == std::string::npos) { // skip autosaves
-				Save * save = new Save((savesDir.GetNameWithSep() + saveDir).ToStdWstring());
+				Save * save = new Save(mGame, (savesDir.GetNameWithSep() + saveDir).ToStdWstring());
 				if (save->isValid()) {
-					save->setGame(mGame);
 					mSaves.push_back(save);
 				} else {
 					delete save;

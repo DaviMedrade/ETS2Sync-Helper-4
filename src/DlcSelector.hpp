@@ -13,13 +13,10 @@ public:
 
 private:
 	wxHyperlinkCtrl * mSelectAll;
-	wxCheckBox * mCheckScandinavia;
-	wxCheckBox * mCheckGoingEast;
-	wxCheckBox * mCheckHighPowerCargo;
-	wxCheckBox * mCheckFrance;
-	wxCheckBox * mCheckHeavyCargo;
+
+	std::map<Ets2::Game, std::vector<wxCheckBox *>> mCheckboxesByGame;
+	std::map<wxCheckBox *, int> mDlcByCheckbox;
 	const Ets2::Save * mSave;
 
-	void setCheckboxDlcPresent(wxCheckBox * checkbox, bool present);
 	void onSelectAll();
 };

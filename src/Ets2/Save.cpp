@@ -1,6 +1,7 @@
 #include "precomp.hpp"
 #include "Save.hpp"
 #include "File.hpp"
+#include "Info.hpp"
 #include "lib/file.hpp"
 #include "lib/Utf8ToUtf16.hpp"
 
@@ -10,29 +11,27 @@ namespace Ets2 {
 	const std::string Save::NAME_ATTRIBUTE = "name";
 	const std::string Save::SAVE_TIME_ATTRIBUTE = "file_time";
 	const std::string Save::DEPEND_ATTRIBUTE = "dependencies[";
-	const std::wstring Save::DEPEND_SCANDINAVIA = L"dlc|eut2_north|";
-	const std::wstring Save::DEPEND_GOINGEAST = L"dlc|eut2_east|";
-	const std::wstring Save::DEPEND_HIGHPOWERCARGO = L"rdlc|eut2_trailers|";
-	const std::wstring Save::DEPEND_FRANCE = L"dlc|eut2_fr|";
-	const std::wstring Save::DEPEND_HEAVYCARGO = L"rdlc|eut2_heavy_cargo|";
+	const std::wstring Save::DEPEND_ETS2_SCANDINAVIA = L"dlc|eut2_north|";
+	const std::wstring Save::DEPEND_ETS2_GOINGEAST = L"dlc|eut2_east|";
+	const std::wstring Save::DEPEND_ETS2_HIGHPOWERCARGO = L"rdlc|eut2_trailers|";
+	const std::wstring Save::DEPEND_ETS2_FRANCE = L"dlc|eut2_fr|";
+	const std::wstring Save::DEPEND_ETS2_HEAVYCARGO = L"rdlc|eut2_heavy_cargo|";
+	const std::wstring Save::DEPEND_ATS_HEAVYCARGO = L"rdlc|ats_heavy|";
 	const std::string Save::ECONOMY_UNIT = "economy";
 	const std::string Save::GAME_TIME_ATTRIBUTE = "game_time";
 	const std::string Save::COMPANY_UNIT = "company";
 	const std::string Save::JOB_UNIT = "job_offer_data";
 	const std::string Save::COMPANY_NAME_PREFIX = "company.volatile.";
 
-	Save::Save(const std::wstring directory)
+	Save::Save(Game game, const std::wstring directory)
 		: Object(SII_BASENAME) {
 		//wxStopWatch initTime;
 		mDlcs = 0;
+		mGame = game;
 		//DEBUG_LOG(L"%s: Initializing", directory);
 		init(directory);
 		//DEBUG_LOG(L"%s: Initialized in %lld µs", mName, initTime.TimeInMicro());
 	};
-
-	void Save::setGame(Game game) {
-		mGame = game;
-	}
 
 	int Save::getDlcs() const {
 		return mDlcs;
@@ -55,16 +54,22 @@ namespace Ets2 {
 			std::wstring wideValue;
 			Utf8ToUtf16(value.data(), value.length(), wideValue);
 			//DEBUG_LOG(L"Dependency: %ls", wideValue);
-			if (wideValue.find(DEPEND_SCANDINAVIA) == 0) {
-				mDlcs |= DLC_SCANDINAVIA;
-			} else if (wideValue.find(DEPEND_GOINGEAST) == 0) {
-				mDlcs |= DLC_GOINGEAST;
-			} else if (wideValue.find(DEPEND_HIGHPOWERCARGO) == 0) {
-				mDlcs |= DLC_HIGHPOWERCARGO;
-			} else if (wideValue.find(DEPEND_FRANCE) == 0) {
-				mDlcs |= DLC_FRANCE;
-			} else if (wideValue.find(DEPEND_HEAVYCARGO) == 0) {
-				mDlcs |= DLC_HEAVYCARGO;
+			if (mGame == Game::ETS2) {
+				if (wideValue.find(DEPEND_ETS2_SCANDINAVIA) == 0) {
+					mDlcs |= DLC_ETS2_SCANDINAVIA;
+				} else if (wideValue.find(DEPEND_ETS2_GOINGEAST) == 0) {
+					mDlcs |= DLC_ETS2_GOINGEAST;
+				} else if (wideValue.find(DEPEND_ETS2_HIGHPOWERCARGO) == 0) {
+					mDlcs |= DLC_ETS2_HIGHPOWERCARGO;
+				} else if (wideValue.find(DEPEND_ETS2_FRANCE) == 0) {
+					mDlcs |= DLC_ETS2_FRANCE;
+				} else if (wideValue.find(DEPEND_ETS2_HEAVYCARGO) == 0) {
+					mDlcs |= DLC_ETS2_HEAVYCARGO;
+				}
+			} else if (mGame == Game::ATS) {
+				if (wideValue.find(DEPEND_ATS_HEAVYCARGO) == 0) {
+					mDlcs |= DLC_ATS_HEAVYCARGO;
+				}
 			}
 		}
 	}
