@@ -12,4 +12,6 @@ public:
 private:
 	wxChoice * mJobList;
 	wxStaticText * mAutoListInfo;
+
+	void onSetJobList();
 };

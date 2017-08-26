@@ -18,7 +18,7 @@ JobListSelector::JobListSelector(wxWindow * parent, wxWindowID id)
 	mAutoListInfo = new wxStaticText(this, wxID_ANY, L"Changes every Wednesday at 0:00 UTC.");
 	controlsSizer->Add(mAutoListInfo, wxSizerFlags().CenterVertical());
 
-	mJobList->Bind(wxEVT_CHOICE, [this](wxCommandEvent&) { mAutoListInfo->Show(getJobList() == -1); });
+	mJobList->Bind(wxEVT_CHOICE, [this](wxCommandEvent&) { onSetJobList(); });
 }
 
 int JobListSelector::getJobList() const {
@@ -27,4 +27,9 @@ int JobListSelector::getJobList() const {
 
 void JobListSelector::setJobList(int jobList) {
 	mJobList->SetSelection(jobList + 1);
+	onSetJobList();
+}
+
+void JobListSelector::onSetJobList() {
+	mAutoListInfo->Show(getJobList() == -1);
 }
