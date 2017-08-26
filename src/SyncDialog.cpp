@@ -1,12 +1,13 @@
 #include "precomp.hpp"
 #include "SyncDialog.hpp"
 
-SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, int dlcs, JobSyncer::SyncType syncType)
+SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, const Ets2::Save::DlcList& refusedDlcs, JobSyncer::SyncType syncType, int jobList)
 	: wxDialog(parent, wxID_ANY, L"Job Sync") {
 	mParent = parent;
 	mSave = save;
-	mDlcs = dlcs;
+	mRefusedDlcs = refusedDlcs;
 	mSyncType = syncType;
+	mJobList = jobList;
 
 	mJobSyncer = new JobSyncer(this, syncType);
 	Bind(EVT_JOB_SYNCER_UPDATE, [this](wxCommandEvent&) { onJobSyncerUpdate(); });
@@ -48,7 +49,7 @@ SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, int dlcs, Job
 	borderSizer->AddSpacer(border.x);
 	Fit();
 	Center();
-	mJobSyncer->start(mSave, mDlcs);
+	mJobSyncer->start(mSave, mRefusedDlcs, mJobList);
 	ShowModal();
 }
 
@@ -94,6 +95,11 @@ void SyncDialog::onJobSyncerUpdate() {
 	case JobSyncer::State::FINISHED:
 		statusType = StatusText::Type::SUCCESS;
 		statusMessage = (mSyncType == JobSyncer::SyncType::SYNC) ? L"Sync complete." : L"Jobs cleared.";
+#if _DEBUG
+		if (mSyncType == JobSyncer::SyncType::SYNC) {
+			statusMessage.append(wxString::Format(L" Total: %i %s.", status.progress, status.progress == 1 ? L"job" : L"jobs"));
+		}
+#endif
 		subStatusMessage = wxString::Format(L"In the game, load the save named “%s”.\n%s", mSave->getName(), (mSyncType == JobSyncer::SyncType::CLEAR) ? L"Then, call Assistance (F7) to generate new jobs." : L"").ToStdWstring();
 		mCloseButton->SetLabel("Close");
 		progress = 100;

@@ -6,6 +6,7 @@
 #include "ProfileSelector.hpp"
 #include "SaveSelector.hpp"
 #include "DlcSelector.hpp"
+#include "JobListSelector.hpp"
 #include "SyncDialog.hpp"
 
 #include <wx/fswatcher.h>
@@ -35,6 +36,7 @@ private:
 	ProfileSelector * mProfileSelector;
 	SaveSelector * mSaveSelector;
 	DlcSelector * mDlcSelector;
+	JobListSelector * mJobListSelector;
 	wxButton * mSyncButton;
 	wxButton * mClearJobsButton;
 	wxButton * mResetEconomyButton;

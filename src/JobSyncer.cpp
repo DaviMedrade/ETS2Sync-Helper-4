@@ -28,7 +28,7 @@ JobSyncer::~JobSyncer() {
 	}
 }
 
-void JobSyncer::start(const Ets2::Save * save, int dlcs) {
+void JobSyncer::start(const Ets2::Save * save, const Ets2::Save::DlcList& refusedDlcs, int jobList) {
 	Status status = getStatus();
 	if (status.state >= State::STARTING && status.state < State::FINISHED) {
 		// Don't use SYNC_DEBUG_LOG because mSave is the save from the sync that's already running
@@ -37,7 +37,8 @@ void JobSyncer::start(const Ets2::Save * save, int dlcs) {
 		return;
 	}
 	mSave = save;
-	mDlcs = dlcs;
+	mRefusedDlcs = refusedDlcs;
+	mJobList = jobList;
 	if (mSave == nullptr) {
 		SYNC_DEBUG_LOG(L"Can't start sync: save is null.");
 		setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"No save selected.");
@@ -87,7 +88,7 @@ void JobSyncer::setStatus(int flags, State state, int progress, wxString message
 }
 
 wxThread::ExitCode JobSyncer::Entry() {
-	SYNC_DEBUG_LOG(L"Sync thread started. DLCs: 0x%x", mDlcs);
+	SYNC_DEBUG_LOG(L"Sync thread started.");
 
 	{
 		wxCriticalSectionLocker locker(mCancelLock);
@@ -123,7 +124,7 @@ wxThread::ExitCode JobSyncer::Entry() {
 
 	setStatus(SET_STATE | SET_MESSAGE, State::INSERTING_JOBS, 0, L"");
 
-	bool result = mSave->replaceJobList(jobs, [&](int progress) -> bool {
+	int result = mSave->replaceJobList(jobs, [&](int progress) -> bool {
 		{
 			wxCriticalSectionLocker locker(mCancelLock);
 			if (mCancel) {
@@ -136,8 +137,8 @@ wxThread::ExitCode JobSyncer::Entry() {
 		return true;
 	});
 	if (getStatus().state == State::INSERTING_JOBS) {
-		if (result) {
-			setStatus(SET_ALL, State::FINISHED, PROGRESS_UNDEFINED, L"Sync complete.");
+		if (result != -1) {
+			setStatus(SET_ALL, State::FINISHED, result, L"Sync complete.");
 		} else {
 			setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"Error inserting jobs into the save.");
 		}
@@ -152,43 +153,29 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 
 	std::wstring syncUrl = APP_URL_SYNC;
 	std::wstring gameParam = L"";
-	std::wstring dlcParam = L"";
+	std::wstring refusedDlcsParam = L"";
+	std::wstring saveDlcsParam = L"";
 	if (mSave->getGame() == Ets2::Game::ATS) {
 		gameParam = L"ats";
-		if (mDlcs & Ets2::Save::DLC_ATS_HEAVYCARGO) {
-			dlcParam += L"heavy";
-		}
 	} else {
 		gameParam = L"ets2";
-		if (mDlcs & Ets2::Save::DLC_ETS2_SCANDINAVIA) {
-			dlcParam += L"north";
-		}
-		if (mDlcs & Ets2::Save::DLC_ETS2_GOINGEAST) {
-			if (!dlcParam.empty()) {
-				dlcParam += L",";
-			}
-			dlcParam += L"east";
-		}
-		if (mDlcs & Ets2::Save::DLC_ETS2_HIGHPOWERCARGO) {
-			if (!dlcParam.empty()) {
-				dlcParam += L",";
-			}
-			dlcParam += L"hpower";
-		}
-		if (mDlcs & Ets2::Save::DLC_ETS2_FRANCE) {
-			if (!dlcParam.empty()) {
-				dlcParam += L",";
-			}
-			dlcParam += L"fr";
-		}
-		if (mDlcs & Ets2::Save::DLC_ETS2_HEAVYCARGO) {
-			if (!dlcParam.empty()) {
-				dlcParam += L",";
-			}
-			dlcParam += L"heavy";
+	}
+	for (auto&& dlc : mRefusedDlcs) {
+		if (!refusedDlcsParam.empty())
+			refusedDlcsParam.push_back(L',');
+		refusedDlcsParam.append(dlc);
+	}
+	if (mSave != nullptr) {
+		for (auto&& dlc : mSave->getDlcs()) {
+			if (!saveDlcsParam.empty())
+				saveDlcsParam.push_back(L',');
+			saveDlcsParam.append(dlc);
 		}
 	}
-	syncUrl += L"&game=" + gameParam + L"&dlcs=" + dlcParam;
+	if (mJobList != -1) {
+		syncUrl += L"&list=" + std::to_wstring(mJobList);
+	}
+	syncUrl += L"&game=" + gameParam + L"&refused_dlcs=" + refusedDlcsParam + "&save_dlcs=" + saveDlcsParam;
 
 	SYNC_DEBUG_LOG(L"Downloading from URL: %s", syncUrl);
 	HINTERNET urlHandle = InternetOpenUrl(mInternetHandle, syncUrl.data(), NULL, (DWORD)-1,
@@ -318,38 +305,40 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 		
 	std::string propName;
 	std::string propValue;
-	std::string jobTarget;
 	for (Value::ConstMemberIterator keyIterator = json.MemberBegin(); keyIterator != json.MemberEnd(); ++keyIterator) {
 		for (Value::ConstValueIterator jobIterator = keyIterator->value.Begin(); jobIterator != keyIterator->value.End(); ++jobIterator) {
 			Ets2::Save::Job job;
-			jobTarget.clear();
+			Ets2::Save::setupBlankJob(job);
 			for (Value::ConstMemberIterator propIterator = jobIterator->MemberBegin(); propIterator != jobIterator->MemberEnd(); ++propIterator) {
 				propName.assign(propIterator->name.GetString(), propIterator->name.GetStringLength());
-				propValue.assign(propIterator->value.GetString(), propIterator->value.GetStringLength());
-				if (propName == "cargo") {
-					job.cargo = propValue;
-				} else if (propName == "company_truck") {
-					job.companyTruck = propValue;
-				} else if (propName == "target_company") {
-					jobTarget.insert(0, propValue);
-				} else if (propName == "target_city") {
-					jobTarget.append(".");
-					jobTarget.append(propValue);
-				} else if (propName == "variant") {
-					job.variant = std::stoi(propValue);
-				} else if (propName == "urgency") {
-					job.urgency = std::stoi(propValue);
-				} else if (propName == "distance") {
-					job.distance = std::stoi(propValue);
-				} else if (propName == "ferry_time") {
-					job.ferryTime = std::stoi(propValue);
-				} else if (propName == "ferry_price") {
-					job.ferryPrice = std::stoi(propValue);
-				} else if (propName != "company" && propName != "city" && propName != "dlc_city" && propName != "dlc_cargo") {
+				if (propName == "cargo" || propName == "company_truck" || propName == "target") {
+					propValue.assign(propIterator->value.GetString(), propIterator->value.GetStringLength());
+					if (propName == "cargo") {
+						job.cargo = propValue;
+					} else if (propName == "company_truck") {
+						job.companyTruck = propValue;
+					} else if (propName == "target") {
+						job.target = propValue;
+					}
+				} else if (propName == "variant" || propName == "urgency" || propName == "shortest_distance_km" || propName == "ferry_time" || propName == "ferry_price" || propName == "trailer_place") {
+					int propValueInt = propIterator->value.GetInt();
+					if (propName == "variant") {
+						job.variant = propValueInt;
+					} else if (propName == "urgency") {
+						job.urgency = propValueInt;
+					} else if (propName == "shortest_distance_km") {
+						job.distance = propValueInt;
+					} else if (propName == "ferry_time") {
+						job.ferryTime = propValueInt;
+					} else if (propName == "ferry_price") {
+						job.ferryPrice = propValueInt;
+					} else if (propName == "trailer_place") {
+						job.trailerPlace = propValueInt;
+					}
+				} else {
 					throw(std::runtime_error(wxString::Format("unknown job property: '%s'", propName)));
 				}
 			}
-			job.target = jobTarget;
 			jobs[keyIterator->name.GetString()].push_back(job);
 		}
 	}

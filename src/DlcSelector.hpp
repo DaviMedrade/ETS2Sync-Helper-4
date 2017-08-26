@@ -9,13 +9,13 @@ public:
 	DlcSelector(wxWindow * parent, wxWindowID);
 
 	void setSave(const Ets2::Save * save);
-	int getDlcs();
+	const Ets2::Save::DlcList getRefusedDlcs() const;
 
 private:
 	wxHyperlinkCtrl * mSelectAll;
 
 	std::map<Ets2::Game, std::vector<wxCheckBox *>> mCheckboxesByGame;
-	std::map<wxCheckBox *, int> mDlcByCheckbox;
+	std::map<wxCheckBox *, std::wstring> mDlcByCheckbox;
 	const Ets2::Save * mSave;
 
 	void onSelectAll();

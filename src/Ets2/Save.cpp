@@ -11,12 +11,6 @@ namespace Ets2 {
 	const std::string Save::NAME_ATTRIBUTE = "name";
 	const std::string Save::SAVE_TIME_ATTRIBUTE = "file_time";
 	const std::string Save::DEPEND_ATTRIBUTE = "dependencies[";
-	const std::wstring Save::DEPEND_ETS2_SCANDINAVIA = L"dlc|eut2_north|";
-	const std::wstring Save::DEPEND_ETS2_GOINGEAST = L"dlc|eut2_east|";
-	const std::wstring Save::DEPEND_ETS2_HIGHPOWERCARGO = L"rdlc|eut2_trailers|";
-	const std::wstring Save::DEPEND_ETS2_FRANCE = L"dlc|eut2_fr|";
-	const std::wstring Save::DEPEND_ETS2_HEAVYCARGO = L"rdlc|eut2_heavy_cargo|";
-	const std::wstring Save::DEPEND_ATS_HEAVYCARGO = L"rdlc|ats_heavy|";
 	const std::string Save::ECONOMY_UNIT = "economy";
 	const std::string Save::GAME_TIME_ATTRIBUTE = "game_time";
 	const std::string Save::COMPANY_UNIT = "company";
@@ -26,14 +20,14 @@ namespace Ets2 {
 	Save::Save(Game game, const std::wstring directory)
 		: Object(SII_BASENAME) {
 		//wxStopWatch initTime;
-		mDlcs = 0;
+		mDlcs.clear();
 		mGame = game;
 		//DEBUG_LOG(L"%s: Initializing", directory);
 		init(directory);
 		//DEBUG_LOG(L"%s: Initialized in %lld µs", mName, initTime.TimeInMicro());
 	};
 
-	int Save::getDlcs() const {
+	const Save::DlcList& Save::getDlcs() const {
 		return mDlcs;
 	}
 
@@ -54,22 +48,22 @@ namespace Ets2 {
 			std::wstring wideValue;
 			Utf8ToUtf16(value.data(), value.length(), wideValue);
 			//DEBUG_LOG(L"Dependency: %ls", wideValue);
-			if (mGame == Game::ETS2) {
-				if (wideValue.find(DEPEND_ETS2_SCANDINAVIA) == 0) {
-					mDlcs |= DLC_ETS2_SCANDINAVIA;
-				} else if (wideValue.find(DEPEND_ETS2_GOINGEAST) == 0) {
-					mDlcs |= DLC_ETS2_GOINGEAST;
-				} else if (wideValue.find(DEPEND_ETS2_HIGHPOWERCARGO) == 0) {
-					mDlcs |= DLC_ETS2_HIGHPOWERCARGO;
-				} else if (wideValue.find(DEPEND_ETS2_FRANCE) == 0) {
-					mDlcs |= DLC_ETS2_FRANCE;
-				} else if (wideValue.find(DEPEND_ETS2_HEAVYCARGO) == 0) {
-					mDlcs |= DLC_ETS2_HEAVYCARGO;
+			size_t dlcNameStart = std::wstring::npos;
+			size_t dlcNameEnd = std::wstring::npos;
+			if (wideValue.find(L"dlc|") == 0) {
+				dlcNameStart = 4;
+			} else if (wideValue.find(L"rdlc|") == 0) {
+				dlcNameStart = 5;
+			}
+			if (dlcNameStart != std::wstring::npos) {
+				if (wideValue.find(L"eut2_", dlcNameStart) == dlcNameStart) {
+					dlcNameStart += 5;
+				} else if (wideValue.find(L"ats_", dlcNameStart) == dlcNameStart) {
+					dlcNameStart += 4;
 				}
-			} else if (mGame == Game::ATS) {
-				if (wideValue.find(DEPEND_ATS_HEAVYCARGO) == 0) {
-					mDlcs |= DLC_ATS_HEAVYCARGO;
-				}
+				dlcNameEnd = wideValue.find(L'|', dlcNameStart);
+				mDlcs.push_back(wideValue.substr(dlcNameStart, dlcNameEnd == std::wstring::npos ? std::wstring::npos : dlcNameEnd - dlcNameStart));
+				//DEBUG_LOG(L"DLC: %ls", mDlcs.at(mDlcs.size() - 1));
 			}
 		}
 	}
@@ -87,18 +81,20 @@ namespace Ets2 {
 		job.distance = 0;
 		job.ferryPrice = 0;
 		job.ferryTime = 0;
+		job.trailerPlace = 0;
 	}
 
-	bool Save::replaceJobList(const JobList& jobs, const std::function<bool(int progress)>& callback) const {
+	// Returns the number of jobs inserted in the save, or -1 in case of error.
+	int Save::replaceJobList(const JobList& jobs, const std::function<bool(int progress)>& callback) const {
 		if (!callback(0)) {
-			return false;
+			return -1;
 		}
 		std::wstring fileName = mDirectory + L"\\" + SAVE_BASENAME;
 		std::string data;
 		long gameTime = -1;
 		if (!File::read(fileName, data)) {
 			DEBUG_LOG(L"Error reading save file '%s'", fileName);
-			return false;
+			return -1;
 		}
 		// Save the original save, unencrypted
 		write_file(data, fileName + L".raw.txt");
@@ -121,9 +117,10 @@ namespace Ets2 {
 		unsigned long lastOffset = 0;
 		int lastProgress = -1;
 		int progress = 0;
+		int jobsAdded = 0;
 		if (data.empty()) {
 			DEBUG_LOG("Save file is empty. Aborting...");
-			return false;
+			return -1;
 		}
 		size_t dataLength = data.length();
 		wxStopWatch sw;
@@ -181,6 +178,9 @@ namespace Ets2 {
 					if (name == "cargo") {
 						newSaveData.append(currentJob->cargo);
 						newLineHasValue = true;
+						if (currentJob != &blankJob) {
+							jobsAdded++;
+						}
 					} else if (name == "company_truck") {
 						bool needsQuotes = (currentJob->companyTruck.empty() || currentJob->companyTruck.find_first_of('/') != std::string::npos);
 						if (needsQuotes) {
@@ -200,6 +200,7 @@ namespace Ets2 {
 					} else if (name == "expiration_time") {
 						if (!hasGameTime) {
 							DEBUG_LOG(L"Jobs started but game time was not found yet.");
+							return false;
 						}
 						newSaveData.append(currentJob == &blankJob ? "nil" : std::to_string(gameTime + 30000));
 						newLineHasValue = true;
@@ -215,6 +216,9 @@ namespace Ets2 {
 					} else if (name == "ferry_price") {
 						newSaveData.append(std::to_string(currentJob->ferryPrice));
 						newLineHasValue = true;
+					} else if (name == "trailer_place") {
+						newSaveData.append(std::to_string(currentJob->trailerPlace));
+						newLineHasValue = true;
 					}
 				}
 				if (!newLineHasValue) {
@@ -223,8 +227,9 @@ namespace Ets2 {
 				newSaveData.append("\r\n");
 			}
 
-			progress = offset * 100 / dataLength;
+			progress = offset / (dataLength / 100);
 			if (progress != lastProgress) {
+				//DEBUG_LOG("offset: %8lu dataLength: %8lu", offset * 100, dataLength);
 				if (!callback(progress)) {
 					return false;
 				}
@@ -234,7 +239,7 @@ namespace Ets2 {
 		});
 		if (!parseSuccess) {
 			DEBUG_LOG(L"Error parsing save file: '%s' (offset 0x%08x)", fileName, currentLine, lastOffset);
-			return false;
+			return -1;
 		}
 		newSaveData.append("\r\n}\r\n");
 		//throw(std::runtime_error("Aborting..."));
@@ -243,9 +248,9 @@ namespace Ets2 {
 			//write_file(newSaveData, fileName + L".synced.txt");
 		} catch (int e) {
 			DEBUG_LOG(L"Error writing save file: '%s' (errno: %d)", e);
-			return false;
+			return -1;
 		}
 		DEBUG_LOG(L"Replaced jobs in %ld ms", sw.Time());
-		return true;
+		return jobsAdded;
 	}
 }

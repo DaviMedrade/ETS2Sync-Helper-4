@@ -2,6 +2,7 @@
 #include "Object.hpp"
 
 #include "lib/Utf8ToUtf16.hpp"
+#include "lib/file.hpp"
 #include "File.hpp"
 
 #include <wx/filename.h>
@@ -23,6 +24,7 @@ namespace Ets2 {
 		if (!File::read(directory + L"\\" + mSiiFileBasename, data)) {
 			return;
 		}
+		//write_file(data, directory + L"\\" + mSiiFileBasename + L".raw.txt");
 
 		if (!File::parse(data, [this](Parser::Sii::Context context, const std::string& name, const std::string& value, const std::string& /* sourceValue */, unsigned long /* offset */) -> bool {
 			processAttribute(context, name, value);

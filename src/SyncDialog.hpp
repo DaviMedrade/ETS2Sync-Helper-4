@@ -6,14 +6,15 @@
 
 class SyncDialog : public wxDialog {
 public:
-	SyncDialog(wxWindow * parent, const Ets2::Save * save, int dlcs, JobSyncer::SyncType syncType);
+	SyncDialog(wxWindow * parent, const Ets2::Save * save, const Ets2::Save::DlcList& refusedDlcs, JobSyncer::SyncType syncType, int jobList);
 	~SyncDialog();
 
 private:
 	wxWindow * mParent;
 	const Ets2::Save * mSave;
-	int mDlcs;
+	std::vector<std::wstring> mRefusedDlcs;
 	JobSyncer::SyncType mSyncType;
+	int mJobList;
 	StatusText * mStatus;
 	wxStaticText * mSubStatus;
 	wxGauge * mProgressBar;

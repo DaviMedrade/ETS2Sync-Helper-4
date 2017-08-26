@@ -16,31 +16,31 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	contentSizer->AddSpacer(wxDLG_UNIT(this, wxPoint(0, 7)).y);
 
 	wxCheckBox * cb;
-	std::vector<wxCheckBox *> * vec = &(mCheckboxesByGame[Ets2::Game::ETS2]);
+	std::vector<wxCheckBox *>* vec = &mCheckboxesByGame[Ets2::Game::ETS2];
 	cb = new wxCheckBox(this, wxID_ANY, "Scandinavia");
 	vec->push_back(cb);
-	mDlcByCheckbox[cb] = Ets2::Save::DLC_ETS2_SCANDINAVIA;
+	mDlcByCheckbox[cb] = L"north";
 
 	cb = new wxCheckBox(this, wxID_ANY, "Going East!");
 	vec->push_back(cb);
-	mDlcByCheckbox[cb] = Ets2::Save::DLC_ETS2_GOINGEAST;
+	mDlcByCheckbox[cb] = L"east";
 
 	cb = new wxCheckBox(this, wxID_ANY, "Vive la France!");
 	vec->push_back(cb);
-	mDlcByCheckbox[cb] = Ets2::Save::DLC_ETS2_FRANCE;
+	mDlcByCheckbox[cb] = L"fr";
 
 	cb = new wxCheckBox(this, wxID_ANY, "High Power Cargo Pack");
 	vec->push_back(cb);
-	mDlcByCheckbox[cb] = Ets2::Save::DLC_ETS2_HIGHPOWERCARGO;
+	mDlcByCheckbox[cb] = L"trailers";
 
 	cb = new wxCheckBox(this, wxID_ANY, "Heavy Cargo Pack");
 	vec->push_back(cb);
-	mDlcByCheckbox[cb] = Ets2::Save::DLC_ETS2_HEAVYCARGO;
+	mDlcByCheckbox[cb] = L"heavy_cargo";
 
-	vec = &(mCheckboxesByGame[Ets2::Game::ATS]);
+	vec = &mCheckboxesByGame[Ets2::Game::ATS];
 	cb = new wxCheckBox(this, wxID_ANY, "Heavy Cargo Pack");
 	vec->push_back(cb);
-	mDlcByCheckbox[cb] = Ets2::Save::DLC_ATS_HEAVYCARGO;
+	mDlcByCheckbox[cb] = L"heavy";
 
 	wxBoxSizer * parentSizer = new wxBoxSizer(wxHORIZONTAL);
 	contentSizer->Add(parentSizer, wxSizerFlags().Expand());
@@ -69,18 +69,18 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 
 void DlcSelector::setSave(const Ets2::Save * save) {
 	mSave = save;
-	int dlcs = 0;
+	const Ets2::Save::DlcList * dlcs = nullptr;
 	Ets2::Game game = Ets2::Game::ETS2;
 	if (mSave != nullptr) {
 		game = mSave->getGame();
-		dlcs = mSave->getDlcs();
+		dlcs = &(mSave->getDlcs());
 	}
 
 	bool present = false;
 	for (auto& m : mCheckboxesByGame) {
 		for (auto& cb : m.second) {
 			cb->Show(m.first == game);
-			present = (m.first == game ? (dlcs & mDlcByCheckbox[cb]) != 0 : false);
+			present = (dlcs != nullptr) && (m.first == game ? (std::find(dlcs->begin(), dlcs->end(), mDlcByCheckbox[cb]) != dlcs->end()) : false);
 			if (present) {
 				cb->Enable();
 			} else {
@@ -93,18 +93,17 @@ void DlcSelector::setSave(const Ets2::Save * save) {
 	Layout();
 }
 
-int DlcSelector::getDlcs() {
-	int dlcs = 0;
+const Ets2::Save::DlcList DlcSelector::getRefusedDlcs() const {
+	Ets2::Save::DlcList dlcs = {};
 	if (mSave == nullptr) {
 		return dlcs;
 	}
 
-	for (auto& cb : mCheckboxesByGame[mSave->getGame()]) {
-		if (cb->IsChecked()) {
-			dlcs |= mDlcByCheckbox[cb];
+	for (auto& cb : mCheckboxesByGame.at(mSave->getGame())) {
+		if (cb->IsEnabled() && !cb->IsChecked()) {
+			dlcs.push_back(mDlcByCheckbox.at(cb));
 		}
 	}
-	DEBUG_LOG("Selected DLCs: 0x%x", dlcs);
 	return dlcs;
 }
 

@@ -59,6 +59,12 @@ MainWindow::MainWindow(const wxString& title)
 
 	mainSizer->AddSpacer(wxDLG_UNIT(panel, wxPoint(7, 7)).y);
 
+	mJobListSelector = new JobListSelector(panel, wxID_ANY);
+	mEts2Children.push_back(mJobListSelector);
+	mainSizer->Add(mJobListSelector, wxSizerFlags().Expand());
+
+	mainSizer->AddSpacer(wxDLG_UNIT(panel, wxPoint(7, 7)).y);
+
 	wxBoxSizer * closeSizer = new wxBoxSizer(wxHORIZONTAL);
 	mainSizer->Add(closeSizer, wxSizerFlags().Expand());
 
@@ -128,6 +134,7 @@ void MainWindow::updateEts2Info(std::wstring directory) {
 		w->setEts2Info(mEts2Info);
 	}
 	onSaveChanged();
+	mJobListSelector->setJobList(-1);
 }
 
 void MainWindow::openWebsite() {
@@ -203,7 +210,7 @@ void MainWindow::onSaveChanged() {
 void MainWindow::onSync() {
 	mFSTimer->Stop();
 	wxDELETE(mFSWatcher);
-	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getDlcs(), JobSyncer::SyncType::SYNC);
+	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getRefusedDlcs(), JobSyncer::SyncType::SYNC, mJobListSelector->getJobList());
 	wxDELETE(mSyncDialog);
 	updateEts2Info(mEts2Info->getDirectory());
 }
@@ -211,7 +218,7 @@ void MainWindow::onSync() {
 void MainWindow::onClearJobs() {
 	mFSTimer->Stop();
 	wxDELETE(mFSWatcher);
-	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getDlcs(), JobSyncer::SyncType::CLEAR);
+	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getRefusedDlcs(), JobSyncer::SyncType::CLEAR, -1);
 	wxDELETE(mSyncDialog);
 	updateEts2Info(mEts2Info->getDirectory());
 }
@@ -219,7 +226,7 @@ void MainWindow::onClearJobs() {
 void MainWindow::onResetEconomy() {
 	mFSTimer->Stop();
 	wxDELETE(mFSWatcher);
-	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getDlcs(), JobSyncer::SyncType::RESET_ECONOMY);
+	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getRefusedDlcs(), JobSyncer::SyncType::RESET_ECONOMY, -1);
 	wxDELETE(mSyncDialog);
 	updateEts2Info(mEts2Info->getDirectory());
 }
