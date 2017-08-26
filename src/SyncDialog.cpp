@@ -1,6 +1,8 @@
 #include "precomp.hpp"
 #include "SyncDialog.hpp"
 
+#include "version.hpp"
+
 SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, const Ets2::Save::DlcList& refusedDlcs, JobSyncer::SyncType syncType, int jobList)
 	: wxDialog(parent, wxID_ANY, L"Job Sync") {
 	mParent = parent;
@@ -117,6 +119,20 @@ void SyncDialog::onJobSyncerUpdate() {
 		subStatusMessage = status.message;
 		mCloseButton->SetLabel("Close");
 		progress = 0;
+		break;
+	case JobSyncer::State::OUTDATED:
+		statusType = StatusText::Type::FAILURE;
+		statusMessage = L"Sync error.";
+		subStatusMessage = status.message;
+		mCloseButton->SetLabel("Close");
+		progress = 0;
+		CallAfter([this] {
+			if (wxMessageBox(L"This version of " + APP_DISPLAY_NAME + L" (" THIS_APP_VERSION L") is outdated.\n\nWould you like to visit the website?", APP_DISPLAY_NAME, wxYES_NO, this) == wxYES) {
+				wxLaunchDefaultBrowser(APP_URL_WEBSITE);
+				Close();
+				GetParent()->Close();
+			}
+		});
 		break;
 	default:
 		statusType = StatusText::Type::FAILURE;

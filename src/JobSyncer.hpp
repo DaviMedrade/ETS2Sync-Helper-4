@@ -24,7 +24,8 @@ public:
 		INSERTING_JOBS,
 		FINISHED,
 		CANCELED,
-		FAILED
+		FAILED,
+		OUTDATED
 	};
 
 	struct Status {

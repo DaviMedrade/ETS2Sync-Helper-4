@@ -196,7 +196,10 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 			setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, L"Could not download the job list.");
 			break;
 		}
-		if (httpStatus != 200) {
+		if (httpStatus == 426) {
+			setStatus(SET_ALL, State::OUTDATED, PROGRESS_UNDEFINED, L"Outdated client. Please update to a newer version.");
+			break;
+		} else if (httpStatus != 200) {
 			SYNC_DEBUG_LOG(L"HTTP status: %d", httpStatus);
 			std::vector<wchar_t> statusMessage(1);
 			DWORD httpStatusMessageSize = 1;
