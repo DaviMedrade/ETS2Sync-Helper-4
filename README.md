@@ -9,6 +9,10 @@
   * [Advanced Method](#setting-up-advanced-method)
     * [Using the Console](#advanced-method-using-the-console)
 * [How To Sync](#how-to-sync)
+* [Features](#features)
+  * [Clear Jobs](#clear-jobs)
+  * [Economy Reset](#economy-reset)
+  * [Job List](#job-list)
 * [Common Errors](#common-errors)
 * [Compiling The Source Code](#compiling-the-source-code)
 
@@ -68,10 +72,17 @@ If you type the beginning of a command and hit <kbd>Tab</kbd>, the Console will 
 16. **Advanced Method only:** In the Console, issue the command `g_save_format 0` (notice that it's a digit zero, not an uppercase “O”).
 17. Check the Freight Market. If all jobs have the same time to expire (“Offer expires in”), and it's about 400 to 500 hours, then the sync was successful.
 
-## Clear Jobs
-One feature introduced in version 5.0.0 is the ability to empty the Freight Market. That way, if you are done using the synced list and want the game to generate a new list of jobs for you to play alone, you just need to do the same process as for syncing, but click on “Clear Jobs” instead of “Sync Jobs”. When you load the save, the Freight Market will be empty. Just jump to the mechanic with F7 and the game will generate new jobs for you.
+## Features
+### Clear Jobs
+This feature gives you the ability to empty the Freight Market. That way, if you are done using the synced list and want the game to generate a new list of jobs for you to play alone, you just need to do the same process as for syncing, but click on “Clear Jobs” instead of “Sync Jobs”. When you load the save, the Freight Market will be empty. Just jump to the mechanic with F7 or do a Quick Trip or two and the game will generate new jobs for you.
 
-Version 5.1.0 introduced the Economy Reset option. If you select a save and click “Economy Reset”, when you load that save the game will show a “Game Change Detected” message, which will instantly generate new jobs (i.e. no need to call Assistance or do Quick Travels to populate the Freight Market). A downside is that it will also move you to your home garage.
+### Economy Reset
+This feature works like Clear Jobs, but it's faster because when you load the save the game will show a “Game Change Detected” message, which will instantly generate new jobs (i.e. no need to call Assistance or do Quick Travels to populate the Freight Market). A downside is that it will also move you to your home garage.
+
+### Job List
+When you sync, the app downloads a list of jobs from the server and inserts it into your save. There are eight job lists for ETS2 and eight for ATS on the server. One of those eight lists is the one that is active for the week—the one that will be used when you leave the “Job List” option in the “Automatic” setting. Every Wednesday the active list switches to the next one (i.e. if List 7 is the active list, then on Wednesday it will switch to List 8, and on the following Wednesday it goes back to List 1).
+
+The job lists themselves don't change, except for when a game update makes it necessary. So, if you want the list of jobs not to change—for example, if it's Monday and you are planning a convoy for the weekend—, just manually select one of the eight lists and be sure to tell everyone in the convoy to pick the same job list in the app before syncing.
 
 ## Common Errors
 
