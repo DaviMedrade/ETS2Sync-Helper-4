@@ -9,6 +9,10 @@
   * [Método Avançado](#configuração-inicial-método-avançado)
     * [Usando o Console](#método-avançado-usando-o-console)
 * [Como Sincronizar](#como-sincronizar)
+* [Funcionalidades](#funcionalidades)
+  * [Clear Jobs](#clear-jobs)
+  * [Economy Reset](#economy-reset)
+  * [Job List](#job-list)
 * [Erros Comuns](#erros-comuns)
 * [Compilando o Código-Fonte](#compilando-o-código-fonte)
 
@@ -68,10 +72,17 @@ Se você digitar o começo de um comando e teclar <kbd>Tab</kbd>, o Console vai 
 16. **Somente Método Avançado:** No Console, execute o comando `g_save_format 0` (note que é um número zero, e não uma letra “O”).
 17. Verifique o Mercado de Fretes. Se todas as cargas tiverem o mesmo tempo para expirar (“A oferta expira em”), e for cerca de 400 a 500 horas, então a sincronização funcionou.
 
-## Clear Jobs
-Uma característica adicionada na versão 5.0.0 é a possibillidade de esvaziar o Mercado de Fretes. Com isso, se você não quer mais usar a lista sincronizada e quiser que o jogo gere novas cargas para você jogar sozinho, é só fazer o mesmo processo que o de sincronização, mas clicando em “Clear Jobs” em vez de “Sync Jobs”. Quando você carregar o save, o Mercado de Fretes estará vazio. Pule para a oficina com o <kbd>F7</kbd> e o jogo gerará novas cargas para você.
+## Funcionalidades
+### Clear Jobs
+Este recurso oferece a possibilidade de esvaziar o Mercado de Fretes. Dessa forma, se você terminou de usar a lista sincronizada e quer que o jogo gere uma nova lista de cargas para você jogar sozinho, basta fazer o mesmo processo que a sincronização, mas clique em “Clear Jobs” em vez de “Sync Jobs”. Quando você carregar o save, o Mercado de Fretes estará vazio. Basta pular para a oficina com <kbd>F7</kbd> ou fazer uma Viagem Rápida ou duas e o jogo gerará novas cargas para você.
 
-A versão 5.1.0 adicionou a opção Economy Reset. Se você selecionar um save e clicar em “Economy Reset”, quando você carregar o save o jogo mostrará uma mensagem de “Mudança no Jogo Detectada”, o que gerará novas cargas imediatamente (i.e. sem precisar ir para a oficina ou fazer Viagens Rápidas para repopular o Mercado de Fretes). Uma desvantagem é que essa opção vai mover o seu caminhão para a sua garagem principal.
+### Economy Reset
+Este recurso funciona como o Clear Jobs, mas é mais rápido porque quando você carregar o save o jogo mostrará uma mensagem “Mudança no Jogo Detectada”, que gerará novas cargas automaticamente (i.e. não é necessário pular para a oficina ou fazer Viagens Rápidas para popular o Mercado de Fretes). Uma desvantagem é que o seu caminhão será movido para a sua garagem principal.
+
+### Job List
+Quando você sincroniza, o programa faz o download de uma lista de cargas do servidor e insere no seu save. O servidor possui oito listas de cargas para o ETS2 e oito para o ATS. Uma dessas oito listas é a que está ativa naquela semana—a que será usada se você deixar a configuração “Job List” na opção “Automatic”. Toda quarta-feira a lista ativa muda para a próxima (i.e. se a lista ativa é a Lista 7, na quarta-feira passa a ser a Lista 8 e na quarta-feira seguinte volta para a Lista 1).
+
+As listas de cargas em si não mudam, exceto quando necessário devido a uma atualização do jogo. Então, se você precisa que a lista de cargas não mude—por exemplo, se é segunda-feira e você está planejando um comboio para o fim de semana—, basta selecionar manualmente uma das oito listas e informar a todos no comboio que essa lista deve ser selecionada no programa antes de sincronizar.
 
 ## Erros Comuns
 
