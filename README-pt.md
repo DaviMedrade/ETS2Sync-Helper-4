@@ -102,7 +102,7 @@ Se você encontrar um problema no programa, informe no link abaixo:
 https://github.com/davidsantos-br/ETS2Sync-Helper-4/issues
 
 ## Compilando o Código-Fonte
-Antes de instalar, você precisa preparar as dependências.
+Antes de compilar, você precisa preparar as dependências.
 
 ### Dependências
 Para as que precisam ser compiladas, instruções para a compilação podem geralmente ser encontradas no arquivo baixado ou na documentação da biblioteca em questão.
