@@ -10,6 +10,7 @@
     * [Usando o Console](#método-avançado-usando-o-console)
 * [Como Sincronizar](#como-sincronizar)
 * [Erros Comuns](#erros-comuns)
+* [Compilando o Código-Fonte](#compilando-o-código-fonte)
 
 Este é o repositório para o  ETS2Sync Helper 4.0 e mais novos. O programa foi recriado do zero em C++, o que o tornou menor e mais rápido.
 
@@ -99,3 +100,25 @@ Você provavelmente digitou o comando incorretamente. Note que o comando `g_save
 Se você encontrar um problema no programa, informe no link abaixo:
 
 https://github.com/davidsantos-br/ETS2Sync-Helper-4/issues
+
+## Compilando o Código-Fonte
+Antes de instalar, você precisa preparar as dependências.
+
+### Dependências
+Para as que precisam ser compiladas, instruções para a compilação podem geralmente ser encontradas no arquivo baixado ou na documentação da biblioteca em questão.
+
+* **wxWidgets 3.1** — baixe e compile, e então coloque o diretório onde foi compilada na variável de ambiente `WXWIN`.
+   
+   wxWidgets fornece várias classes utilitárias usadas no programa, principalmente para interface gráfica e suporte a threads. O código do programa seria bem mais complexo se estas funcionalidades tivessem que ser desenvolvidas usando a API nativa do Windows.
+* **zlib** — baixe e compile, e então coloque o diretório onde foi compilada na variável de ambiente `ZLIBDIR`.
+
+   Quando arquivos `.sii` criptografados são criados pelos jogos, os dados são compactados e em seguida criptografados. A zlib é usada para descompactar os dados, depois de serem descriptografados.
+* **Ragel 6** — baixe e instale um executável para Windows (`ragel.exe`) ou baixe e compile o código-fonte, e então adicione o diretório do arquivo `ragel.exe` à sua `PATH`.
+
+   O Ragel é usado para gerar o código das state machines que lêem arquivos `.cfg` e arquivos `.sii` em modo texto.
+* **GraphViz** — baixe e instale uma versão para Windows ou baixe e compile o código-fonte, e então adicione o diretório do arquivo `dot.exe` à sua `PATH`.
+
+   O GraphViz gera uma representação visual dos parsers gerados pelo Ragel. Isso facilita entender como esses parsers funcionam e consequentemente como corrigir problemas neles se necessário.
+
+### Compilação
+Uma vez configuradas as dependências, abra o arquivo `ETS2Sync-Helper-4.sln` no Visual Studio 2017 e compile normalmente. Esteja ciente que numa compilação em modo debug o processo de sincronização é substancialmente mais lento.
