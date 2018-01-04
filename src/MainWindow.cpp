@@ -205,6 +205,8 @@ void MainWindow::onSaveChanged() {
 	DEBUG_LOG(L"Save changed to %s", save == nullptr ? L"null" : save->getName());
 	mDlcSelector->setSave(save);
 	mSyncButton->Enable(save != nullptr);
+	mClearJobsButton->Enable(save != nullptr);
+	mResetEconomyButton->Enable(save != nullptr);
 }
 
 void MainWindow::onSync() {

@@ -15,7 +15,7 @@ bool Ets2SyncHelperApp::OnInit() {
 	SetAppDisplayName(APP_DISPLAY_NAME);
 	wxInitAllImageHandlers();
 	
-	MainWindow *mainWindow = new MainWindow(APP_DISPLAY_NAME);
+	MainWindow *mainWindow = new MainWindow(APP_DISPLAY_NAME + " " + APP_VERSION);
 	SetTopWindow(mainWindow);
 	mainWindow->Show(true);
 
