@@ -59,8 +59,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 5,3,1,0
- PRODUCTVERSION 5,3,1,0
+ FILEVERSION 5,4,0,0
+ PRODUCTVERSION 5,4,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x3L
@@ -77,12 +77,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "David Santos"
             VALUE "FileDescription", "ETS2Sync Helper"
-            VALUE "FileVersion", "5.3.1"
+            VALUE "FileVersion", "5.4.0"
             VALUE "InternalName", "ets2sync_helper"
-            VALUE "LegalCopyright", "© 2017 by David Santos"
+            VALUE "LegalCopyright", "© 2018 by David Santos"
             VALUE "OriginalFilename", "ets2sync_helper.exe"
             VALUE "ProductName", "ETS2Sync Helper"
-            VALUE "ProductVersion", "5.3.1"
+            VALUE "ProductVersion", "5.4.0"
         END
     END
     BLOCK "VarFileInfo"
