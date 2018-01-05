@@ -118,6 +118,7 @@ wxThread::ExitCode JobSyncer::Entry() {
 		job.distance = 1000;
 		job.ferryPrice = 1000;
 		job.ferryTime = 100;
+		job.trailerPlace = 0;
 		jobs.clear();
 		jobs[mSave->getGame() == Ets2::Game::ETS2 ? "sanbuilders.hamburg" : "vm_car_dlr.las_vegas"].push_back(job);
 	}
