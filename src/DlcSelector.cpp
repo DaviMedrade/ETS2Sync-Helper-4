@@ -29,6 +29,10 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"fr";
 
+	cb = new wxCheckBox(this, wxID_ANY, "Italia");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"it";
+
 	cb = new wxCheckBox(this, wxID_ANY, "High Power Cargo Pack");
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"trailers";
@@ -38,6 +42,10 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	mDlcByCheckbox[cb] = L"heavy_cargo";
 
 	vec = &mCheckboxesByGame[Ets2::Game::ATS];
+	cb = new wxCheckBox(this, wxID_ANY, "New Mexico");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"nwmexico";
+
 	cb = new wxCheckBox(this, wxID_ANY, "Heavy Cargo Pack");
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"heavy";
@@ -119,6 +127,8 @@ void DlcSelector::onSelectAll() {
 	}
 
 	for (auto& cb : mCheckboxesByGame[game]) {
-		cb->SetValue(!clear);
+		if (cb->IsEnabled()) {
+			cb->SetValue(!clear);
+		}
 	}
 }
