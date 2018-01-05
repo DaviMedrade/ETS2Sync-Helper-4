@@ -134,7 +134,7 @@ void MainWindow::updateEts2Info(std::wstring directory) {
 		w->setEts2Info(mEts2Info);
 	}
 	onSaveChanged();
-	mJobListSelector->setJobList(-1);
+	//mJobListSelector->setJobList(-1);
 }
 
 void MainWindow::openWebsite() {
