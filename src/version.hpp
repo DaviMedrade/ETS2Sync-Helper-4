@@ -3,7 +3,7 @@
 #include <string>
 
 // put this here so it's easier to bump
-#define THIS_APP_VERSION L"5.4.0"
+#define THIS_APP_VERSION L"5.5.0"
 
 const std::wstring APP_NAME = L"ETS2SyncHelper";
 const std::wstring APP_DISPLAY_NAME = L"ETS2Sync Helper";
@@ -11,7 +11,7 @@ const std::wstring APP_VERSION = THIS_APP_VERSION;
 
 const std::wstring APP_URL_WEBSITE = L"http://sync.dsantosdev.com/";
 #if _DEBUG
-const std::wstring APP_URL_API_BASE = APP_URL_WEBSITE + "app-test/";
+const std::wstring APP_URL_API_BASE = L"http://sync.dsantosdev.com.teste/app/";
 #else
 const std::wstring APP_URL_API_BASE = APP_URL_WEBSITE + "app/";
 #endif

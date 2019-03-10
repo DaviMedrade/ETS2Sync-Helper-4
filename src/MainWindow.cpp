@@ -212,7 +212,7 @@ void MainWindow::onSaveChanged() {
 void MainWindow::onSync() {
 	mFSTimer->Stop();
 	wxDELETE(mFSWatcher);
-	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getRefusedDlcs(), JobSyncer::SyncType::SYNC, mJobListSelector->getJobList());
+	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getDlcs(), JobSyncer::SyncType::SYNC, mJobListSelector->getJobList());
 	wxDELETE(mSyncDialog);
 	updateEts2Info(mEts2Info->getDirectory());
 }
@@ -220,7 +220,7 @@ void MainWindow::onSync() {
 void MainWindow::onClearJobs() {
 	mFSTimer->Stop();
 	wxDELETE(mFSWatcher);
-	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getRefusedDlcs(), JobSyncer::SyncType::CLEAR, -1);
+	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getDlcs(), JobSyncer::SyncType::CLEAR, -1);
 	wxDELETE(mSyncDialog);
 	updateEts2Info(mEts2Info->getDirectory());
 }
@@ -228,7 +228,7 @@ void MainWindow::onClearJobs() {
 void MainWindow::onResetEconomy() {
 	mFSTimer->Stop();
 	wxDELETE(mFSWatcher);
-	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getRefusedDlcs(), JobSyncer::SyncType::RESET_ECONOMY, -1);
+	mSyncDialog = new SyncDialog(this, getSelectedSave(), mDlcSelector->getDlcs(), JobSyncer::SyncType::RESET_ECONOMY, -1);
 	wxDELETE(mSyncDialog);
 	updateEts2Info(mEts2Info->getDirectory());
 }

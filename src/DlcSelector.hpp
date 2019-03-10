@@ -9,7 +9,7 @@ public:
 	DlcSelector(wxWindow * parent, wxWindowID);
 
 	void setSave(const Ets2::Save * save);
-	const Ets2::Save::DlcList getRefusedDlcs() const;
+	const Ets2::Save::DlcList getDlcs() const;
 
 private:
 	wxHyperlinkCtrl * mSelectAll;

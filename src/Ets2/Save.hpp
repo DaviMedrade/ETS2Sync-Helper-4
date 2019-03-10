@@ -16,14 +16,17 @@ namespace Ets2 {
 
 		struct Job {
 			std::string cargo;
-			int variant;
 			std::string target;
 			int urgency;
 			int distance;
 			int ferryTime;
 			int ferryPrice;
 			std::string companyTruck;
-			int trailerPlace;
+			std::string trailerVariant;
+			std::string trailerDefinition;
+			int unitsCount;
+			int fillRatio;
+			std::vector<std::string> trailerPlace;
 		};
 
 		typedef std::map<std::string, std::vector<Job>> JobList;

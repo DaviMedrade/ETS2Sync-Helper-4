@@ -63,7 +63,7 @@ namespace Ets2 {
 				}
 				dlcNameEnd = wideValue.find(L'|', dlcNameStart);
 				mDlcs.push_back(wideValue.substr(dlcNameStart, dlcNameEnd == std::wstring::npos ? std::wstring::npos : dlcNameEnd - dlcNameStart));
-				//DEBUG_LOG(L"DLC: %ls", mDlcs.at(mDlcs.size() - 1));
+				//DEBUG_LOG(L"%ls: DLC: %ls", mName, mDlcs.at(mDlcs.size() - 1));
 			}
 		}
 	}
@@ -73,15 +73,18 @@ namespace Ets2 {
 	}
 
 	void Save::setupBlankJob(Job& job) {
-		job.cargo = "null";
-		job.companyTruck = "";
-		job.variant = -1;
 		job.target = "";
 		job.urgency = -1;
 		job.distance = 0;
-		job.ferryPrice = 0;
 		job.ferryTime = 0;
-		job.trailerPlace = 0;
+		job.ferryPrice = 0;
+		job.cargo = "null";
+		job.companyTruck = "";
+		job.trailerVariant = "null";
+		job.trailerDefinition = "null";
+		job.unitsCount = 0;
+		job.fillRatio = 1;
+		job.trailerPlace = {};
 	}
 
 	// Returns the number of jobs inserted in the save, or -1 in case of error.
@@ -168,7 +171,9 @@ namespace Ets2 {
 				}
 				newSaveData.append("}\r\n");
 			} else {
-				newSaveData.append(1, ' ').append(name).append(": ");
+				if (!inJob || name.find("trailer_place[") != 0) {
+					newSaveData.append(1, ' ').append(name).append(": ");
+				}
 				newLineHasValue = false;
 				if (inEconomy && name == GAME_TIME_ATTRIBUTE) {
 					gameTime = std::stol(value);
@@ -191,8 +196,11 @@ namespace Ets2 {
 							newSaveData.append("\"");
 						}
 						newLineHasValue = true;
-					} else if (name == "variant") {
-						newSaveData.append(currentJob->variant == -1 ? "nil" : std::to_string(currentJob->variant));
+					} else if (name == "trailer_variant") {
+						newSaveData.append(currentJob->trailerVariant);
+						newLineHasValue = true;
+					} else if (name == "trailer_definition") {
+						newSaveData.append(currentJob->trailerDefinition);
 						newLineHasValue = true;
 					} else if (name == "target") {
 						newSaveData.append("\"").append(currentJob->target).append("\"");
@@ -217,14 +225,30 @@ namespace Ets2 {
 						newSaveData.append(std::to_string(currentJob->ferryPrice));
 						newLineHasValue = true;
 					} else if (name == "trailer_place") {
-						newSaveData.append(std::to_string(currentJob->trailerPlace));
+						newSaveData.append(std::to_string(currentJob->trailerPlace.size()));
+						int tpIdx = 0;
+						for (std::string p : currentJob->trailerPlace) {
+							newSaveData.append("\r\n trailer_place[");
+							newSaveData.append(std::to_string(tpIdx));
+							newSaveData.append("]: ");
+							newSaveData.append(p);
+							++tpIdx;
+						}
+						newLineHasValue = true;
+					} else if (name == "units_count") {
+						newSaveData.append(std::to_string(currentJob->unitsCount));
+						newLineHasValue = true;
+					} else if (name == "fill_ratio") {
+						newSaveData.append(std::to_string(currentJob->fillRatio));
 						newLineHasValue = true;
 					}
 				}
-				if (!newLineHasValue) {
-					newSaveData.append(sourceValue);
+				if (name.find("trailer_place[") != 0) {
+					if (!newLineHasValue) {
+						newSaveData.append(sourceValue);
+					}
+					newSaveData.append("\r\n");
 				}
-				newSaveData.append("\r\n");
 			}
 
 			progress = offset / (dataLength / 100);

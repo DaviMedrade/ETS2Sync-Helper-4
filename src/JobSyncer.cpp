@@ -28,7 +28,7 @@ JobSyncer::~JobSyncer() {
 	}
 }
 
-void JobSyncer::start(const Ets2::Save * save, const Ets2::Save::DlcList& refusedDlcs, int jobList) {
+void JobSyncer::start(const Ets2::Save * save, const Ets2::Save::DlcList& dlcs, int jobList) {
 	Status status = getStatus();
 	if (status.state >= State::STARTING && status.state < State::FINISHED) {
 		// Don't use SYNC_DEBUG_LOG because mSave is the save from the sync that's already running
@@ -37,7 +37,7 @@ void JobSyncer::start(const Ets2::Save * save, const Ets2::Save::DlcList& refuse
 		return;
 	}
 	mSave = save;
-	mRefusedDlcs = refusedDlcs;
+	mDlcs = dlcs;
 	mJobList = jobList;
 	if (mSave == nullptr) {
 		SYNC_DEBUG_LOG(L"Can't start sync: save is null.");
@@ -112,13 +112,16 @@ wxThread::ExitCode JobSyncer::Entry() {
 		Ets2::Save::Job job;
 		job.cargo = "invalid";
 		job.companyTruck = "invalid";
-		job.variant = 100;
+		job.trailerDefinition = "invalid";
+		job.trailerVariant = "invalid";
 		job.target = "invalid.invalid";
 		job.urgency = 0;
 		job.distance = 1000;
 		job.ferryPrice = 1000;
 		job.ferryTime = 100;
-		job.trailerPlace = 0;
+		job.trailerPlace = {};
+		job.unitsCount = 0;
+		job.fillRatio = 1;
 		jobs.clear();
 		jobs[mSave->getGame() == Ets2::Game::ETS2 ? "sanbuilders.hamburg" : "vm_car_dlr.las_vegas"].push_back(job);
 	}
@@ -154,29 +157,21 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 
 	std::wstring syncUrl = APP_URL_SYNC;
 	std::wstring gameParam = L"";
-	std::wstring refusedDlcsParam = L"";
-	std::wstring saveDlcsParam = L"";
+	std::wstring dlcsParam = L"";
 	if (mSave->getGame() == Ets2::Game::ATS) {
 		gameParam = L"ats";
 	} else {
 		gameParam = L"ets2";
 	}
-	for (auto&& dlc : mRefusedDlcs) {
-		if (!refusedDlcsParam.empty())
-			refusedDlcsParam.push_back(L',');
-		refusedDlcsParam.append(dlc);
-	}
-	if (mSave != nullptr) {
-		for (auto&& dlc : mSave->getDlcs()) {
-			if (!saveDlcsParam.empty())
-				saveDlcsParam.push_back(L',');
-			saveDlcsParam.append(dlc);
-		}
+	for (auto&& dlc : mDlcs) {
+		if (!dlcsParam.empty())
+			dlcsParam.push_back(L',');
+		dlcsParam.append(dlc);
 	}
 	if (mJobList != -1) {
 		syncUrl += L"&list=" + std::to_wstring(mJobList);
 	}
-	syncUrl += L"&game=" + gameParam + L"&refused_dlcs=" + refusedDlcsParam + "&save_dlcs=" + saveDlcsParam;
+	syncUrl += L"&game=" + gameParam + L"&dlcs=" + dlcsParam;
 
 	SYNC_DEBUG_LOG(L"Downloading from URL: %s", syncUrl);
 	HINTERNET urlHandle = InternetOpenUrl(mInternetHandle, syncUrl.data(), NULL, (DWORD)-1,
@@ -315,7 +310,7 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 			Ets2::Save::setupBlankJob(job);
 			for (Value::ConstMemberIterator propIterator = jobIterator->MemberBegin(); propIterator != jobIterator->MemberEnd(); ++propIterator) {
 				propName.assign(propIterator->name.GetString(), propIterator->name.GetStringLength());
-				if (propName == "cargo" || propName == "company_truck" || propName == "target") {
+				if (propName == "cargo" || propName == "company_truck" || propName == "target" || propName == "trailer_variant" || propName == "trailer_definition") {
 					propValue.assign(propIterator->value.GetString(), propIterator->value.GetStringLength());
 					if (propName == "cargo") {
 						job.cargo = propValue;
@@ -323,12 +318,14 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 						job.companyTruck = propValue;
 					} else if (propName == "target") {
 						job.target = propValue;
+					} else if (propName == "trailer_variant") {
+						job.trailerVariant = propValue;
+					} else if (propName == "trailer_definition") {
+						job.trailerDefinition = propValue;
 					}
-				} else if (propName == "variant" || propName == "urgency" || propName == "shortest_distance_km" || propName == "ferry_time" || propName == "ferry_price" || propName == "trailer_place") {
+				} else if (propName == "urgency" || propName == "shortest_distance_km" || propName == "ferry_time" || propName == "ferry_price" || propName == "units_count" || propName == "fill_ratio") {
 					int propValueInt = propIterator->value.GetInt();
-					if (propName == "variant") {
-						job.variant = propValueInt;
-					} else if (propName == "urgency") {
+					if (propName == "urgency") {
 						job.urgency = propValueInt;
 					} else if (propName == "shortest_distance_km") {
 						job.distance = propValueInt;
@@ -336,11 +333,21 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 						job.ferryTime = propValueInt;
 					} else if (propName == "ferry_price") {
 						job.ferryPrice = propValueInt;
-					} else if (propName == "trailer_place") {
-						job.trailerPlace = propValueInt;
+					} else if (propName == "units_count") {
+						job.unitsCount = propValueInt;
+					} else if (propName == "fill_ratio") {
+						job.fillRatio = propValueInt;
+					}
+				} else if (propName == "trailer_place") {
+					job.trailerPlace = {};
+					auto trailerPlaceArray = propIterator->value.GetArray();
+					for (Value::ConstValueIterator trailerPlaceIterator = trailerPlaceArray.Begin() ; trailerPlaceIterator != trailerPlaceArray.End() ; ++trailerPlaceIterator) {
+						job.trailerPlace.push_back(std::string(trailerPlaceIterator->GetString(), trailerPlaceIterator->GetStringLength()));
 					}
 				} else {
-					throw(std::runtime_error(wxString::Format("unknown job property: '%s'", propName)));
+					SYNC_DEBUG_LOG(L"unknown job property: '%s'", propName);
+					setStatus(SET_ALL, State::FAILED, PROGRESS_UNDEFINED, wxString::Format(L"Unknown remote job property: %s", propName).ToStdWstring());
+					return false;
 				}
 			}
 			jobs[keyIterator->name.GetString()].push_back(job);

@@ -3,11 +3,11 @@
 
 #include "version.hpp"
 
-SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, const Ets2::Save::DlcList& refusedDlcs, JobSyncer::SyncType syncType, int jobList)
+SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, const Ets2::Save::DlcList& dlcs, JobSyncer::SyncType syncType, int jobList)
 	: wxDialog(parent, wxID_ANY, L"Job Sync") {
 	mParent = parent;
 	mSave = save;
-	mRefusedDlcs = refusedDlcs;
+	mDlcs = dlcs;
 	mSyncType = syncType;
 	mJobList = jobList;
 
@@ -51,7 +51,7 @@ SyncDialog::SyncDialog(wxWindow * parent, const Ets2::Save * save, const Ets2::S
 	borderSizer->AddSpacer(border.x);
 	Fit();
 	Center();
-	mJobSyncer->start(mSave, mRefusedDlcs, mJobList);
+	mJobSyncer->start(mSave, mDlcs, mJobList);
 	ShowModal();
 }
 

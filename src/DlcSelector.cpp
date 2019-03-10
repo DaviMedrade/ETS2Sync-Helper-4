@@ -41,10 +41,18 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"heavy_cargo";
 
+	cb = new wxCheckBox(this, wxID_ANY, "Beyond the Baltic Sea");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"balt";
+
 	vec = &mCheckboxesByGame[Ets2::Game::ATS];
 	cb = new wxCheckBox(this, wxID_ANY, "New Mexico");
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"nwmexico";
+
+	cb = new wxCheckBox(this, wxID_ANY, "Oregon");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"oregon";
 
 	cb = new wxCheckBox(this, wxID_ANY, "Heavy Cargo Pack");
 	vec->push_back(cb);
@@ -53,7 +61,7 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	wxBoxSizer * parentSizer = new wxBoxSizer(wxHORIZONTAL);
 	contentSizer->Add(parentSizer, wxSizerFlags().Expand());
 	for (size_t i = 0; i < std::max(mCheckboxesByGame[Ets2::Game::ETS2].size(), mCheckboxesByGame[Ets2::Game::ATS].size()); i++) {
-		if ((i % 3) == 0) {
+		if ((i % 4) == 0) {
 			if (i > 0) {
 				parentSizer->AddStretchSpacer(1);
 			}
@@ -101,14 +109,14 @@ void DlcSelector::setSave(const Ets2::Save * save) {
 	Layout();
 }
 
-const Ets2::Save::DlcList DlcSelector::getRefusedDlcs() const {
+const Ets2::Save::DlcList DlcSelector::getDlcs() const {
 	Ets2::Save::DlcList dlcs = {};
 	if (mSave == nullptr) {
 		return dlcs;
 	}
 
 	for (auto& cb : mCheckboxesByGame.at(mSave->getGame())) {
-		if (cb->IsEnabled() && !cb->IsChecked()) {
+		if (cb->IsEnabled() && cb->IsChecked()) {
 			dlcs.push_back(mDlcByCheckbox.at(cb));
 		}
 	}

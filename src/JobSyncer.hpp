@@ -34,7 +34,7 @@ public:
 		wxString message;
 	};
 
-	void start(const Ets2::Save * save, const Ets2::Save::DlcList& refusedDlcs, int jobList);
+	void start(const Ets2::Save * save, const Ets2::Save::DlcList& dlcs, int jobList);
 	const Status getStatus();
 	void cancel();
 
@@ -56,7 +56,7 @@ private:
 	bool mCancel;
 	wxCriticalSection mCancelLock;
 	const Ets2::Save * mSave;
-	Ets2::Save::DlcList mRefusedDlcs;
+	Ets2::Save::DlcList mDlcs;
 	int mJobList;
 
 	void setStatus(int flags, State state, int progress, wxString message);
