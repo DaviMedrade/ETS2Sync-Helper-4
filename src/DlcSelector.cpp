@@ -54,9 +54,17 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"oregon";
 
+	cb = new wxCheckBox(this, wxID_ANY, "Washington");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"wa";
+
 	cb = new wxCheckBox(this, wxID_ANY, "Heavy Cargo Pack");
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"heavy";
+
+	cb = new wxCheckBox(this, wxID_ANY, "Forest Machinery");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"forest";
 
 	wxBoxSizer * parentSizer = new wxBoxSizer(wxHORIZONTAL);
 	contentSizer->Add(parentSizer, wxSizerFlags().Expand());
