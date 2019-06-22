@@ -23,7 +23,7 @@ This app synchronizes the job list on Euro Truck Simulator 2 or American Truck S
 As of now, the app is available only in English. Other languages might be (re-)added in the future.
 
 ## Download
-http://files.dsantosdev.com/ets2sync_helper.zip
+https://github.com/davidsantos-br/ETS2Sync-Helper-4/releases
 
 ## Setting Up
 Before we start syncing, you need to choose whether you'll use the simple or the advanced method. The simple method is easier, but it makes ETS2/ATS freeze for a second or two every few minutes when the game creates an autosave. That might make people crash into you since for them your truck will suddenly stop and then continue moving after a second or two. For that reason, I recommend the advanced method. It is a bit more complex, but it avoids those autosave lags. Follow the section below corresponding to the method of your choice. You'll only need to do this once for each game (i.e. once for ETS2 and once for ATS).

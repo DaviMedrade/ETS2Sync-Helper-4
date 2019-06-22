@@ -23,7 +23,7 @@ Este programa sincroniza a lista de cargas do Euro Truck Simulator 2 ou American
 No momento o programa só está disponível em inglês. Outros idiomas podem ser (re-)adicionados no futuro.
 
 ## Download
-http://files.dsantosdev.com/ets2sync_helper.zip
+https://github.com/davidsantos-br/ETS2Sync-Helper-4/releases
 
 ## Configuração Inicial
 Antes de começar a sincronizar, você precisa escolher se vai usar o método simples ou o avançado. O método simples é mais fácil, mas ele faz com que o ETS2/ATS trave por um ou dois segundos a cada cinco ou dez minutos, quando o jogo cria um autosave. Isso pode fazer outros jogadores baterem no seu caminhão já que para eles o seu caminhão vai parar de repente e continuar a andar depois de um ou dois segundos. Por esse motivo, eu recomendo o método avançado. É um pouco mais complexo, mas não tem esses lags de autosave. Siga a seção abaixo correspondente ao método que você escolher. Você só vai precisar fazer isso uma vez para cada jogo (i.e. uma vez para o ETS2 e uma vez para o ATS).
