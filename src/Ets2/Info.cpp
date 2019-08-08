@@ -24,6 +24,7 @@ namespace Ets2 {
 
 		wxFileName configFileName(mDirectory + L"\\config.cfg");
 		wxDir profilesDir(mDirectory + L"\\profiles\\");
+		wxDir_steamcloud profilesDir(mDirectory + L"\\steam_profiles\\");
 		mIsValid = configFileName.Exists() && profilesDir.IsOpened();
 		if (!mIsValid) {
 			return;
@@ -33,7 +34,7 @@ namespace Ets2 {
 
 		wxStopWatch parseTime;
 		processSaveFormat();
-		DEBUG_LOG(L"%s: parsed in %lld µs", configFileName.GetFullPath(), parseTime.TimeInMicro());
+		DEBUG_LOG(L"%s: parsed in %lld Âµs", configFileName.GetFullPath(), parseTime.TimeInMicro());
 
 		// Get the profiles
 		wxString profileDir;
@@ -48,7 +49,7 @@ namespace Ets2 {
 			fileFound = profilesDir.GetNext(&profileDir);
 		}
 		mProfiles.sort();
-		DEBUG_LOG(L"%s: initialized in %lld µs", mDirectory, initTime.TimeInMicro());
+		DEBUG_LOG(L"%s: initialized in %lld Âµs", mDirectory, initTime.TimeInMicro());
 	}
 
 	Info::Info(Info& info) {
