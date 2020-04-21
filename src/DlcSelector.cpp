@@ -45,6 +45,10 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"balt";
 
+	cb = new wxCheckBox(this, wxID_ANY, "Road to the Black Sea");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"balkane";
+
 	vec = &mCheckboxesByGame[Ets2::Game::ATS];
 	cb = new wxCheckBox(this, wxID_ANY, "New Mexico");
 	vec->push_back(cb);
