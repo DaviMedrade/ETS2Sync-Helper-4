@@ -11,7 +11,7 @@ const std::wstring APP_VERSION = THIS_APP_VERSION;
 
 const std::wstring APP_URL_WEBSITE = L"https://github.com/Inklay/";
 
-const std::wstring APP_URL_BASE = L"https://inklay-webapp.glitch.me/ETS2SH/app/";
+const std::wstring APP_URL_BASE = L"https://inklay-glitch-webapp.glitch.me/SyncHelper/app/";
 
 const std::wstring APP_URL_CHECK_VERSION = APP_URL_BASE + "check_version?v=" + APP_VERSION + "&hl=en";
 
