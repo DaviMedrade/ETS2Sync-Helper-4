@@ -1,3 +1,5 @@
+# Temporarily not working for ATS, will be fixed in a few days
+
 # ETS2&ATS Sync Helper
 
 [LICENSE](LICENSE.md)
