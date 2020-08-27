@@ -84,7 +84,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>build\$(Configuration)\</OutDir>
     <IntDir>build\$(Configuration)\</IntDir>
-    <TargetName>ETS2&amp;ATS Sync Helper</TargetName>
+    <TargetName>ETS2_ATS_Sync_Helper</TargetName>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
