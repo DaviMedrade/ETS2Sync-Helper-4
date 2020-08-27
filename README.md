@@ -62,7 +62,7 @@ The job lists themselves don't change, except for when a game update makes it ne
 
 ### Unfortunately, binary saves aren't supported yet. Please create the save using a text format.
 You selected an old save or the game isn't set up properly.  
-* If ETS2Sync Helper doesn't show a green “Settings OK” message in the “Game Settings” panel, you need to do the steps in the [Setting Up: Simple Method](#setting-up-simple-method) section again.
+* If ETS2Sync Helper doesn't show a green “Settings OK” message in the “Game Settings” panel, you need to do the steps in the [Setting Up](#setting-up) section again.
 * If it was already showing “Settings OK”, make sure the correct profile and save are selected before syncing.
 * If it still doesn't work, close ETS2Sync Helper and close the game, then reopen ETS2Sync Helper and see if the green “Settings OK” message is there. If it isn't, see above. If it is, open the game and make sure to create a new save before syncing again.
 
