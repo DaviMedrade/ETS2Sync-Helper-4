@@ -1,12 +1,10 @@
-#include <winres.h>
-
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 /////////////////////////////////////////////////////////////////////////////
-// Neutral resources
+// Neutre resources
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
 
@@ -59,8 +57,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 5,6,0,0
- PRODUCTVERSION 5,6,0,0
+ FILEVERSION 5,7,0,0
+ PRODUCTVERSION 5,7,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x3L
@@ -75,14 +73,14 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "David Santos"
+            VALUE "CompanyName", "Inklay"
             VALUE "FileDescription", "ETS2Sync Helper"
-            VALUE "FileVersion", "5.6.0"
+            VALUE "FileVersion", "5.7.0.0"
             VALUE "InternalName", "ets2sync_helper"
-            VALUE "LegalCopyright", "© 2019 by David Santos"
+            VALUE "LegalCopyright", "© 2020 Inklay, forked form David Santos's project"
             VALUE "OriginalFilename", "ets2sync_helper.exe"
             VALUE "ProductName", "ETS2Sync Helper"
-            VALUE "ProductVersion", "5.6.0"
+            VALUE "ProductVersion", "5.7.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -91,7 +89,7 @@ BEGIN
     END
 END
 
-#endif    // Neutral resources
+#endif    // Neutre resources
 /////////////////////////////////////////////////////////////////////////////
 
 

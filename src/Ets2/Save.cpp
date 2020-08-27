@@ -84,7 +84,7 @@ namespace Ets2 {
 		job.trailerDefinition = "null";
 		job.unitsCount = 0;
 		job.fillRatio = 1;
-		job.trailerPlace = {};
+		job.trailerPlace = 0;
 	}
 
 	// Returns the number of jobs inserted in the save, or -1 in case of error.
@@ -225,15 +225,7 @@ namespace Ets2 {
 						newSaveData.append(std::to_string(currentJob->ferryPrice));
 						newLineHasValue = true;
 					} else if (name == "trailer_place") {
-						newSaveData.append(std::to_string(currentJob->trailerPlace.size()));
-						int tpIdx = 0;
-						for (std::string p : currentJob->trailerPlace) {
-							newSaveData.append("\r\n trailer_place[");
-							newSaveData.append(std::to_string(tpIdx));
-							newSaveData.append("]: ");
-							newSaveData.append(p);
-							++tpIdx;
-						}
+						newSaveData.append(std::to_string(currentJob->trailerPlace));
 						newLineHasValue = true;
 					} else if (name == "units_count") {
 						newSaveData.append(std::to_string(currentJob->unitsCount));
@@ -269,7 +261,7 @@ namespace Ets2 {
 		//throw(std::runtime_error("Aborting..."));
 		try {
 			write_file(newSaveData, fileName);
-			//write_file(newSaveData, fileName + L".synced.txt");
+			write_file(newSaveData, fileName + L".synced.txt");
 		} catch (int e) {
 			DEBUG_LOG(L"Error writing save file: '%s' (errno: %d)", e);
 			return -1;

@@ -26,7 +26,7 @@ namespace Ets2 {
 			std::string trailerDefinition;
 			int unitsCount;
 			int fillRatio;
-			std::vector<std::string> trailerPlace;
+			int trailerPlace;
 		};
 
 		typedef std::map<std::string, std::vector<Job>> JobList;

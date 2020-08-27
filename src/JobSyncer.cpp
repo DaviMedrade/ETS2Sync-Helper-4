@@ -323,7 +323,7 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 					} else if (propName == "trailer_definition") {
 						job.trailerDefinition = propValue;
 					}
-				} else if (propName == "urgency" || propName == "shortest_distance_km" || propName == "ferry_time" || propName == "ferry_price" || propName == "units_count" || propName == "fill_ratio") {
+				} else if (propName == "urgency" || propName == "shortest_distance_km" || propName == "ferry_time" || propName == "ferry_price" || propName == "units_count" || propName == "fill_ratio" || propName == "trailer_place") {
 					int propValueInt = propIterator->value.GetInt();
 					if (propName == "urgency") {
 						job.urgency = propValueInt;
@@ -337,12 +337,8 @@ bool JobSyncer::getJobs(Ets2::Save::JobList& jobs) {
 						job.unitsCount = propValueInt;
 					} else if (propName == "fill_ratio") {
 						job.fillRatio = propValueInt;
-					}
-				} else if (propName == "trailer_place") {
-					job.trailerPlace = {};
-					auto trailerPlaceArray = propIterator->value.GetArray();
-					for (Value::ConstValueIterator trailerPlaceIterator = trailerPlaceArray.Begin() ; trailerPlaceIterator != trailerPlaceArray.End() ; ++trailerPlaceIterator) {
-						job.trailerPlace.push_back(std::string(trailerPlaceIterator->GetString(), trailerPlaceIterator->GetStringLength()));
+					} else if (propName == "trailer_place") {
+						job.trailerPlace = propValueInt;
 					}
 				} else {
 					SYNC_DEBUG_LOG(L"unknown job property: '%s'", propName);
