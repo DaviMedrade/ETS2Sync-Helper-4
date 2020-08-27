@@ -45,6 +45,10 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"balt";
 
+	cb = new wxCheckBox(this, wxID_ANY, "Special Transport");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"oversize";
+
 	cb = new wxCheckBox(this, wxID_ANY, "Road to the Black Sea");
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"balkane";
@@ -73,7 +77,7 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	wxBoxSizer * parentSizer = new wxBoxSizer(wxHORIZONTAL);
 	contentSizer->Add(parentSizer, wxSizerFlags().Expand());
 	for (size_t i = 0; i < std::max(mCheckboxesByGame[Ets2::Game::ETS2].size(), mCheckboxesByGame[Ets2::Game::ATS].size()); i++) {
-		if ((i % 4) == 0) {
+		if ((i % 5) == 0) {
 			if (i > 0) {
 				parentSizer->AddStretchSpacer(1);
 			}
