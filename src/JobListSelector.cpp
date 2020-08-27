@@ -15,7 +15,7 @@ JobListSelector::JobListSelector(wxWindow * parent, wxWindowID id)
 
 	controlsSizer->AddSpacer(wxDLG_UNIT(this, wxPoint(4, 4)).x);
 
-	mAutoListInfo = new wxStaticText(this, wxID_ANY, L"Changes every Wednesday at 0:00 UTC.");
+	mAutoListInfo = new wxStaticText(this, wxID_ANY, L"Changes every day at 0:00 UTC.");
 	controlsSizer->Add(mAutoListInfo, wxSizerFlags().CenterVertical());
 
 	mJobList->Bind(wxEVT_CHOICE, [this](wxCommandEvent&) { onSetJobList(); });
