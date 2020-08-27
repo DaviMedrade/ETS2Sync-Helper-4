@@ -74,7 +74,7 @@ This is likely a temporary issue with your Internet connection or with the serve
 ## Bugs/Issues
 If you find a problem in the app, report it on the link below:
 
-https://github.com/Inklay/ETS2-ATS-Sync-Helper/pulls
+https://github.com/Inklay/ETS2-ATS-Sync-Helper/issues
 
 ## Compiling The Source Code
 Before you can compile, you need to set up the dependencies.
