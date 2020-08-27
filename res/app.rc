@@ -76,12 +76,12 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "CompanyName", "Inklay"
-            VALUE "FileDescription", "ETS2Sync Helper"
+            VALUE "FileDescription", "ETS2&ATS Sync Helper"
             VALUE "FileVersion", "5.7.0"
-            VALUE "InternalName", "ets2sync_helper"
+            VALUE "InternalName", "ETS2-ATS-Sync-Helper"
             VALUE "LegalCopyright", "© Copyright 2020 Inklay, forked from David Santos's project"
-            VALUE "OriginalFilename", "ets2sync_helper.exe"
-            VALUE "ProductName", "ETS2Sync Helper"
+            VALUE "OriginalFilename", "ETS2&ATS Sync Helper.exe"
+            VALUE "ProductName", "ETS2&ATS Sync Helper"
             VALUE "ProductVersion", "5.7.0"
         END
     END

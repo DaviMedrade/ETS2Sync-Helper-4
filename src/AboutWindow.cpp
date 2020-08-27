@@ -61,7 +61,7 @@ AboutWindow::AboutWindow(MainWindow * wndParent)
 
 	wxBoxSizer * creatorSizer = new wxBoxSizer(wxHORIZONTAL);
 	creatorSizer->Add(new wxStaticText(this, wxID_ANY, "Developer: "));
-	creatorSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, "David Santos", "https://github.com/davidsantos-br/"));
+	creatorSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, "Inklay & David Santos", "https://github.com/Inklay/"));
 	infoSizer->Add(creatorSizer);
 
 	/*wxBoxSizer * jobListSizer = new wxBoxSizer(wxHORIZONTAL);
