@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ETS2Sync-Helper-4", "ETS2Sync-Helper-4.vcxproj", "{C58DE3D1-9460-4ACD-A334-8A8B9991DEF4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ETS2Sync-Helper", "ETS2Sync-Helper-4.vcxproj", "{C58DE3D1-9460-4ACD-A334-8A8B9991DEF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
