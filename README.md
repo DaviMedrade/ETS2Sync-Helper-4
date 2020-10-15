@@ -99,3 +99,6 @@ For those that need to be compiled, compilation instructions can often be found 
 
 ### Compilation
 Once the dependencies are in place, just open `ETS2Sync-Helper-4.sln` in Visual Studio 2017 and compile normally. Be aware that in a debug build the sync process is noticeably slower.
+
+### Backend
+The backend code can be found here: https://github.com/Inklay/WebService
