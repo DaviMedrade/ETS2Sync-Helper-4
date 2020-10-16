@@ -53,14 +53,14 @@ AboutWindow::AboutWindow(MainWindow * wndParent)
 	infoSizer->AddSpacer(internalBorder.y);
 
 	wxBoxSizer * websiteSizer = new wxBoxSizer(wxHORIZONTAL);
-	websiteSizer->Add(new wxStaticText(this, wxID_ANY, "Website: "));
+	websiteSizer->Add(new wxStaticText(this, wxID_ANY, "Github: "));
 	websiteSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, APP_URL_WEBSITE, APP_URL_WEBSITE));
 	infoSizer->Add(websiteSizer);
 
 	infoSizer->AddSpacer(border.y);
 
 	wxBoxSizer * creatorSizer = new wxBoxSizer(wxHORIZONTAL);
-	creatorSizer->Add(new wxStaticText(this, wxID_ANY, "Developer: "));
+	creatorSizer->Add(new wxStaticText(this, wxID_ANY, "Developesr: "));
 	creatorSizer->Add(new wxHyperlinkCtrl(this, wxID_ANY, "Inklay & David Santos", "https://github.com/Inklay/"));
 	infoSizer->Add(creatorSizer);
 
