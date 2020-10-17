@@ -1,4 +1,4 @@
-# Temporarily not working for ATS, will be fixed in a few days
+# Temporarily not working for ATS, will be fixed when I'll have the game
 
 # ETS2&ATS Sync Helper
 
