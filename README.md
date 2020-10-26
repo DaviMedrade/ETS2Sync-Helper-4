@@ -1,5 +1,3 @@
-# Temporarily not working for ATS, will be fixed when I'll have the game
-
 # ETS2&ATS Sync Helper
 
 [LICENSE](LICENSE.md)
