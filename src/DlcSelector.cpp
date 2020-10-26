@@ -49,6 +49,10 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	vec->push_back(cb);
 	mDlcByCheckbox[cb] = L"balkane";
 
+	cb = new wxCheckBox(this, wxID_ANY, "Iberia");
+	vec->push_back(cb);
+	mDlcByCheckbox[cb] = L"???";
+
 	vec = &mCheckboxesByGame[Ets2::Game::ATS];
 	cb = new wxCheckBox(this, wxID_ANY, "New Mexico");
 	vec->push_back(cb);
@@ -73,7 +77,7 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 	wxBoxSizer * parentSizer = new wxBoxSizer(wxHORIZONTAL);
 	contentSizer->Add(parentSizer, wxSizerFlags().Expand());
 	for (size_t i = 0; i < std::max(mCheckboxesByGame[Ets2::Game::ETS2].size(), mCheckboxesByGame[Ets2::Game::ATS].size()); i++) {
-		if ((i % 4) == 0) {
+		if ((i % 5) == 0) {
 			if (i > 0) {
 				parentSizer->AddStretchSpacer(1);
 			}
@@ -109,7 +113,7 @@ void DlcSelector::setSave(const Ets2::Save * save) {
 		for (auto& cb : m.second) {
 			cb->Show(m.first == game);
 			present = (dlcs != nullptr) && (m.first == game ? (std::find(dlcs->begin(), dlcs->end(), mDlcByCheckbox[cb]) != dlcs->end()) : false);
-			if (present) {
+			if (present && cb->GetLabelText().compare("???") != 0) {
 				cb->Enable();
 			} else {
 				cb->SetValue(false);
