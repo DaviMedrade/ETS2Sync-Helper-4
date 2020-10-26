@@ -77,12 +77,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Inklay"
             VALUE "FileDescription", "ETS2&ATS Sync Helper"
-            VALUE "FileVersion", "5.8.0"
+            VALUE "FileVersion", "5.8.0 PR1"
             VALUE "InternalName", "ETS2-ATS-Sync-Helper"
             VALUE "LegalCopyright", "© Copyright 2020 Inklay, forked from David Santos's project"
             VALUE "OriginalFilename", "ETS2_ATS_Sync_Helper.exe"
             VALUE "ProductName", "ETS2&ATS Sync Helper"
-            VALUE "ProductVersion", "5.8.0"
+            VALUE "ProductVersion", "5.8.0 PR1"
         END
     END
     BLOCK "VarFileInfo"
