@@ -63,7 +63,7 @@ namespace Ets2 {
 				}
 				dlcNameEnd = wideValue.find(L'|', dlcNameStart);
 				mDlcs.push_back(wideValue.substr(dlcNameStart, dlcNameEnd == std::wstring::npos ? std::wstring::npos : dlcNameEnd - dlcNameStart));
-				//DEBUG_LOG(L"%ls: DLC: %ls", mName, mDlcs.at(mDlcs.size() - 1));
+				DEBUG_LOG(L"%ls: DLC: %ls", mName, mDlcs.at(mDlcs.size() - 1));
 			}
 		}
 	}
