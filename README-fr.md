@@ -71,7 +71,7 @@ Si vous sélectionnez une ancienne sauvegarde ou que votre jeu est mal configur�
 ### Could not download the job list. HTTP 401 Unauthorized
 ### Could not download the job list. HTTP 403 Forbidden
 ### Could not download the job list. HTTP 404 Not Found
-Il y a très certainement un problème avec le server ou votre connection internet, si votre connection fonctionne correctement, attendez quelques minutes et réessayer.
+Il y a très certainement un problème avec le serveur ou votre connection internet, si votre connection fonctionne correctement, attendez quelques minutes et réessayer.
 
 ## Bugs
 Si vous recontrer une erreur ou un bug, merci de le reporter ici:
