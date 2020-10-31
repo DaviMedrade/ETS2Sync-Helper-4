@@ -1,5 +1,7 @@
 # ETS2&ATS Sync Helper
 
+* [Version française](README-fr.md)
+
 [LICENSE](LICENSE.md)
 
 * [Download](#download)
@@ -10,7 +12,11 @@
   * [Economy Reset](#economy-reset)
   * [Job List](#job-list)
 * [Common Errors](#common-errors)
+* [Bugs/Issues](#Bugs/Issues)
 * [Compiling The Source Code](#compiling-the-source-code)
+* [Dependencies](#Dependencies)
+* [Compilation](#Compilation)
+* [Backend](#Backend)
 
 This is the repository for ETS2&ATS Sync helper. The program has been rewritten from scratch in C++ by David Santos, I am now keeping up to date to support game's update and New DLCs
 
@@ -33,7 +39,7 @@ Open ETS2Sync Helper and select the game (ETS2 or ATS). Look in the “Game Sett
 3. Type a name for the save or select an existing save to overwrite it.
 4. Click “Save”.
 5. Hit `Alt`+`Tab` to minimize the game.
-6. Open ETS2Sync Helper if it isn't already open. Make sure the correct game is selected  in the “Game” option of the “Game Settings” panel.
+6. Open ETS2Sync Helper if it isn't already open. Make sure the correct game is selected in the “Game” option of the “Game Settings” panel.
 7. Make sure the correct profile and save are selected in the “Select ETS2/ATS Profile” and “Select ETS2/ATS Save” panels.
 8. Select the DLCs you and your friends have (do not select a DLC unless everyone you're playing with owns it too).
 9. Click “Sync Jobs”.
@@ -42,7 +48,7 @@ Open ETS2Sync Helper and select the game (ETS2 or ATS). Look in the “Game Sett
 12. Click on “Save & Load” → “Load Game”.
 13. Select the save you just synced (the one you created/replaced in step 4).
 14. Click “Load”.
-15. Check the Freight Market. If all jobs have the same time to expire (“Offer expires in”), and it's about 400 to 500 hours, then the sync was successful.
+15. Check the Freight Market and or the Cargo Market. If all jobs have the same time to expire (“Offer expires in”), and it's about 400 to 500 hours, then the sync was successful.
 
 ## Features
 ### Clear Jobs
@@ -52,13 +58,13 @@ This feature gives you the ability to empty the Freight Market. That way, if you
 This feature works like Clear Jobs, but it's faster because when you load the save the game will show a “Game Change Detected” message, which will instantly generate new jobs (i.e. no need to call Assistance or do Quick Travels to populate the Freight Market). A downside is that it will also move you to your home garage.
 
 ### Job List
-When you sync, the app downloads a list of jobs from the server and inserts it into your save. There are eight job lists for ETS2 and eight for ATS on the server. One of those eight lists is the one that is active for the week—the one that will be used when you leave the “Job List” option in the “Automatic” setting. Every Wednesday the active list switches to the next one (i.e. if List 7 is the active list, then on Wednesday it will switch to List 8, and on the following Wednesday it goes back to List 1).
+When you sync, the app downloads a list of jobs from the server and inserts it into your save. There are eight job lists for ETS2 and eight for ATS on the server. One of those eight lists is the one that is used when you leave the “Job List” option in the “Automatic” setting. Every Wednesday the active list switches to the next one (i.e. if List 7 is the active list, then on Wednesday it will switch to List 8, and on the following Wednesday it goes back to List 1).
 
-The job lists themselves don't change, except for when a game update makes it necessary. So, if you want the list of jobs not to change—for example, if it's Monday and you are planning a convoy for the weekend—, just manually select one of the eight lists and be sure to tell everyone in the convoy to pick the same job list in the app before syncing.
+The job lists themselves don't change, except for when a game update makes it necessary (a game or DLC update or a new DLC). So, if you want the list of jobs not to change—for example, if it's Monday and you are planning a convoy for the weekend—, just manually select one of the eight lists and be sure to tell everyone in the convoy to pick the same job list in the app before syncing.
 
 ## Common Errors
 
-### Unfortunately, binary saves aren't supported yet. Please create the save using a text format.
+### Unfortunately, binary saves aren't supported. Please create the save using a text format.
 You selected an old save or the game isn't set up properly.  
 * If ETS2Sync Helper doesn't show a green “Settings OK” message in the “Game Settings” panel, you need to do the steps in the [Setting Up](#setting-up) section again.
 * If it was already showing “Settings OK”, make sure the correct profile and save are selected before syncing.
