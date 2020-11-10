@@ -2,7 +2,7 @@
 
 #include <string>
 
-#define THIS_APP_VERSION L"5.8.0 PR1"
+#define THIS_APP_VERSION L"5.8.0"
 
 const std::wstring APP_NAME = L"ETS2-ATS-Sync-Helper";
 const std::wstring APP_DISPLAY_NAME = L"ETS2&ATS Sync Helper";
