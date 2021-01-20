@@ -84,7 +84,7 @@ DlcSelector::DlcSelector(wxWindow * parent, wxWindowID id)
 
 	cb = new wxCheckBox(this, wxID_ANY, "Colorado");
 	vec->push_back(cb);
-	mDlcByCheckbox[cb] = L"?";
+	mDlcByCheckbox[cb] = L"colorado";
 
 	wxBoxSizer * parentSizer = new wxBoxSizer(wxHORIZONTAL);
 	contentSizer->Add(parentSizer, wxSizerFlags().Expand());
@@ -133,7 +133,6 @@ void DlcSelector::setSave(const Ets2::Save * save) {
 			}
 		}
 	}
-
 	Layout();
 }
 
