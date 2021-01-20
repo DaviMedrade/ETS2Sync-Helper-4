@@ -1,7 +1,7 @@
 # ETS2&ATS Sync Helper
 
 ## ETS2 support: version 1.39 and all DLCs.
-## ATS support: version 1.38 without Colorado. (1.39 and Colorado will be added soon)
+## ATS support: version 1.39 and all DLCS.
 
 * [Version française](README-fr.md)
 
